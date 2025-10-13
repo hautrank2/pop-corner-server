@@ -1,0 +1,6 @@
+@PopCorner_HostAddress = http://localhost:5165
+
+GET {{PopCorner_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
