@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using PopCorner.Data;
+using PopCorner.Mappings;
 
 // 1. Register services
 var builder = WebApplication.CreateBuilder(args);
@@ -13,8 +13,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<PopCornerDbContext>(opt =>
+builder.Services.AddDbContext<DbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("PopCornerConnectionString")));
+
+// Replace this line:
+// builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+// With this line:
+builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
 
 // 2. Build app
 var app = builder.Build();
