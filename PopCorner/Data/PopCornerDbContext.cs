@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PopCorner.Models.Domains;
+using System.Reflection.Emit;
 
 namespace PopCorner.Data
 {
@@ -39,6 +40,10 @@ namespace PopCorner.Data
             b.Entity<Movie>()
                 .Property(m => m.TrailerUrl)
                 .HasMaxLength(500);
+
+            b.Entity<Movie>()
+                .Property(m => m.ReleaseDate)
+                .HasColumnType("date");
 
             // ===== RATING =====
             b.Entity<Rating>()

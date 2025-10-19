@@ -11,11 +11,11 @@ namespace PopCorner.Repositories
         public MovieRepository(PopCornerDbContext dbContext) {
             this.dbContext = dbContext;
         }
-        public Task<Movie> CreateAsync(Movie region)
+        public async Task<Movie> CreateAsync(Movie movie)
         {
-            this.dbContext.Movies.AddAsync(region);
-            this.dbContext.SaveChangesAsync();
-            return Task.FromResult(region);
+            await dbContext.Movies.AddAsync(movie);
+            await dbContext.SaveChangesAsync();
+            return movie;
         }
         public Task<Movie?> DeleteAsync(Guid id)
         {

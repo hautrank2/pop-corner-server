@@ -13,7 +13,7 @@ namespace PopCorner.Models.DTOs
         [Required, MaxLength(2000)]
         public string Description { get; set; } = string.Empty;
 
-        [Required]
+        [Required, Column(TypeName = "date")]
         public DateTime ReleaseDate { get; set; }
 
         [Required, Range(0, int.MaxValue)]
