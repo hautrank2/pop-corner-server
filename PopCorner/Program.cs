@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using PopCorner.Data;
 using PopCorner.Mappings;
+using PopCorner.Repositories;
+using PopCorner.Repositories.Interfaces;
 
 // 1. Register services
 var builder = WebApplication.CreateBuilder(args);
@@ -7,20 +10,26 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<DbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("PopCornerConnectionString")));
-
 // Replace this line:
 // builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 // With this line:
+builder.Services.AddDbContext<PopCornerDbContext>(opt =>
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("PopCornerConnectionString")));
+
+builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<IFileRepository, FileRepository>();
+
 builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
+
 
 // 2. Build app
 var app = builder.Build();
@@ -36,6 +45,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseStaticFiles();
 
 app.MapControllers();
 

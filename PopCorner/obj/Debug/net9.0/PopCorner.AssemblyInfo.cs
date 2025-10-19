@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PopCorner")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ff058ce8ca19f0c3bac2af8837e6f4957c4c6b5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+818adf498d7bd99a24f6f1b0dd4a433487633c04")]
 [assembly: System.Reflection.AssemblyProductAttribute("PopCorner")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PopCorner")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

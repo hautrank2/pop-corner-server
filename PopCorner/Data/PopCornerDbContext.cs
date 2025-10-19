@@ -5,7 +5,7 @@ namespace PopCorner.Data
 {
     public class PopCornerDbContext : DbContext
     {
-        public PopCornerDbContext(DbContextOptions<DbContext> options) : base(options) { }
+        public PopCornerDbContext(DbContextOptions<PopCornerDbContext> options) : base(options) { }
 
         public DbSet<Movie> Movies { get; set; }
 

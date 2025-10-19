@@ -10,27 +10,28 @@ namespace PopCorner.Models.Domains
         [Required, MaxLength(200)]
         public string Title { get; set; } = string.Empty;
 
-        [MaxLength(2000)]
-        public string? Description { get; set; }
+        [Required, MaxLength(2000)]
+        public string Description { get; set; } = string.Empty;
 
-        public DateTime? ReleaseDate { get; set; }
+        [Required]
+        public DateTime ReleaseDate { get; set; }
 
-        [Range(0, int.MaxValue)]
-        public int? Duration { get; set; }
+        [Required, Range(0, int.MaxValue)]
+        public int Duration { get; set; }
 
-        [Url]
-        public string? PosterUrl { get; set; }
-        [Url]
-        public string? TrailerUrl { get; set; }   
+        [Required, Url]
+        public required string PosterUrl { get; set; }
+        [Required , Url]
+        public required string TrailerUrl { get; set; }   
 
-        [Column(TypeName = "text[]")]
-        public string[]? ImgUrls { get; set; }
+        [Required, Column(TypeName = "text[]")]
+        public required string[] ImgUrls { get; set; }
 
-        [MaxLength(100)]
-        public string? Director { get; set; }
+        [Required, MaxLength(100)]
+        public string Director { get; set; } = string.Empty;
 
-        [MaxLength(100)]
-        public string? Country { get; set; }
+        [Required, MaxLength(100)]
+        public string Country { get; set; } = string.Empty;
 
         /// <summary>Đếm lượt xem</summary>
         [Range(0, int.MaxValue)]
@@ -41,7 +42,7 @@ namespace PopCorner.Models.Domains
         public double AvgRating { get; set; } = 0;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
         // --- Navigation ---
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();

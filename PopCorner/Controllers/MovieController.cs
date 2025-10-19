@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PopCorner.Data;
+using PopCorner.Models.DTOs;
 using PopCorner.Repositories.Interfaces;
 
 namespace PopCorner.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/movie")]
     [ApiController]
     public class MovieController : Controller
     {
@@ -22,78 +23,27 @@ namespace PopCorner.Controllers
 
         // GET: MovieController
         [HttpGet]
-        public ActionResult Index()
+        public async Task<IActionResult> GetAll()
         {
-            return View();
+            var movies = await movieRepository.GetAllAsync();
+
+            return Ok(movies);
         }
 
-        // GET: MovieController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: MovieController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: MovieController/Create
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<IActionResult> CreateMovie([FromBody] CreateMovieDto createMovieDto)
         {
+            var poster = createMovieDto.Poster;
+            var imgFiles = createMovieDto.ImgFiles;
+
             try
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
+                
+            } catch (Exception ex)
             {
-                return View();
+                return BadRequest(ex.Message);
             }
-        }
-
-        // GET: MovieController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: MovieController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: MovieController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: MovieController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Ok();
         }
     }
 }
