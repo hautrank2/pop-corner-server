@@ -26,11 +26,10 @@ namespace PopCorner.Controllers
 
         // GET: MovieController
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] MovieQueryDto movieQuery)
         {
-            var movies = await movieRepository.GetAllAsync();
-
-            return Ok(movies);
+            var res = await movieRepository.GetAllAsync(movieQuery);
+            return Ok(res);
         }
 
         [HttpPost]

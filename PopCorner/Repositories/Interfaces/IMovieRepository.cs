@@ -1,10 +1,12 @@
-﻿using PopCorner.Models.Domains;
+﻿using PopCorner.Models.Common;
+using PopCorner.Models.Domains;
+using PopCorner.Models.DTOs;
 
 namespace PopCorner.Repositories.Interfaces
 {
     public interface IMovieRepository
     {
-        Task<List<Movie>> GetAllAsync();
+        Task<PaginationResponse<Movie>> GetAllAsync(MovieQueryDto movieQuery);
 
         Task<Movie?> GetByIdAsync(Guid id);
 

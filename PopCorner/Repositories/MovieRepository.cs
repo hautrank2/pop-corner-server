@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PopCorner.Data;
+using PopCorner.Models.Common;
 using PopCorner.Models.Domains;
+using PopCorner.Models.DTOs;
 using PopCorner.Repositories.Interfaces;
 
 namespace PopCorner.Repositories
@@ -21,9 +23,20 @@ namespace PopCorner.Repositories
         {
             throw new NotImplementedException();
         }
-        public async Task<List<Movie>> GetAllAsync()
+        public async Task<PaginationResponse<Movie>> GetAllAsync(MovieQueryDto query)
         {
-            return await dbContext.Movies.ToListAsync();
+            var movieQuery = dbContext.Movies.Include(x => x.MovieGenres).Include(x => x.MovieActors).AsQueryable() ;
+            var total = await movieQuery.CountAsync();
+
+            var page = Math.Max(query.Page ?? 1, 1);
+            var pageSize = Math.Max(query.PageSize ?? 10, 1);
+            var totalPage = total / pageSize;
+
+            var movies = await movieQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize).ToListAsync();
+
+            return new PaginationResponse<Movie> { Page = page, TotalPage = totalPage, PageSize = pageSize, Items = movies };
         }
         public Task<Movie?> GetByIdAsync(Guid id)
         {

@@ -4,9 +4,23 @@ using PopCorner.Mappings;
 using PopCorner.Repositories;
 using PopCorner.Repositories.Interfaces;
 
+var CORS_NAME = "AllowFrontend";
+
 // 1. Register services
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CORS_NAME,
+       policy =>
+       {
+           policy
+               .WithOrigins("http://localhost:4200")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+       });
+});
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -41,6 +55,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(CORS_NAME);
 
 app.UseHttpsRedirection();
 
