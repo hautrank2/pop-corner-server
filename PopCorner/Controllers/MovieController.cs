@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PopCorner.Data;
-using PopCorner.Models.DTOs;
 using PopCorner.Models.Common;
-using PopCorner.Repositories.Interfaces;
 using PopCorner.Models.Domains;
+using PopCorner.Models.DTOs;
+using PopCorner.Repositories;
+using PopCorner.Repositories.Interfaces;
 
 namespace PopCorner.Controllers
 {
@@ -118,6 +119,79 @@ namespace PopCorner.Controllers
                     : "Rollback successfully (all files deleted).";
 
                 return BadRequest($"Create movie failed: {ex.Message}\n{removeMessage}");
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            try
+            {
+                var entity = await movieRepository.DeleteAsync(id);
+
+                if (entity == null)
+                {
+                    return NotFound($"Can't find artist with id {id}");
+                }
+                var (deleted, error) = await DeleteAvt(entity.PosterUrl);
+
+                if (!deleted)
+                {
+                    return StatusCode(207, new
+                    {
+                        message = "Movie deleted, but failed to remove poster imagee.",
+                        fileError = error,
+                        code = "FILE_DELETE_FAILED",
+                        data = entity
+                    });
+                }
+
+                var failedDeletes = new List<object>();
+
+                foreach (var imgUrl in entity.ImgUrls)
+                {
+                    var (deletedImg, imgError) = await DeleteAvt(imgUrl);
+                    if (!deletedImg)
+                    {
+                        failedDeletes.Add(new
+                        {
+                            imgUrl,
+                            error = imgError
+                        });
+                    }
+                }
+
+                // Nếu có ảnh xóa thất bại => trả 207 Multi-Status
+                if (failedDeletes.Any())
+                {
+                    return StatusCode(207, new
+                    {
+                        message = "Movie deleted, but some images failed to delete.",
+                        failedImages = failedDeletes,
+                        code = "FILE_DELETE_PARTIAL",
+                        data = entity
+                    });
+                }
+
+                return Ok(entity);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Create movie failed: {ex.Message}");
+            }
+        }
+
+        async Task<(bool deleted, string? error)> DeleteAvt(string url)
+        {
+            try
+            {
+                var ok = await fileRepository.RemoveFileByPathName(url);
+                return (ok, ok ? "null" : "Unknown error when removing file");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
             }
         }
     }

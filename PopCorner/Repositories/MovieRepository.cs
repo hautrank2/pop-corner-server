@@ -13,19 +13,9 @@ namespace PopCorner.Repositories
         public MovieRepository(PopCornerDbContext dbContext) {
             this.dbContext = dbContext;
         }
-        public async Task<Movie> CreateAsync(Movie movie)
-        {
-            await dbContext.Movies.AddAsync(movie);
-            await dbContext.SaveChangesAsync();
-            return movie;
-        }
-        public Task<Movie?> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
         public async Task<PaginationResponse<Movie>> GetAllAsync(MovieQueryDto query)
         {
-            var movieQuery = dbContext.Movies.Include(x => x.MovieGenres).Include(x => x.MovieActors).AsQueryable() ;
+            var movieQuery = dbContext.Movies.Include(x => x.MovieGenres).Include(x => x.MovieActors).AsQueryable();
             var total = await movieQuery.CountAsync();
 
             var page = Math.Max(query.Page ?? 1, 1);
@@ -38,10 +28,33 @@ namespace PopCorner.Repositories
 
             return new PaginationResponse<Movie> { Page = page, TotalPage = totalPage, PageSize = pageSize, Items = movies };
         }
-        public Task<Movie?> GetByIdAsync(Guid id)
+        public async Task<Movie> CreateAsync(Movie movie)
         {
-            throw new NotImplementedException();
+            await dbContext.Movies.AddAsync(movie);
+            await dbContext.SaveChangesAsync();
+            return movie;
         }
+
+        public async Task<Movie?> DeleteAsync(Guid id)
+        {
+            var entity = await dbContext.Movies.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            dbContext.Movies.Remove(entity);
+            await dbContext.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<Movie?> GetByIdAsync(Guid id)
+        {
+            var entity = await dbContext.FindAsync<Movie>(id);
+            return entity == null ? null : entity;
+        }
+
         public Task<Movie?> UpdateAsync(Guid id, Movie region)
         {
             throw new NotImplementedException();

@@ -21,7 +21,9 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Service\" />
     <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\artist\" />
     <Folder Include="wwwroot\movies\" />
   </ItemGroup>
 

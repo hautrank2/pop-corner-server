@@ -1,3 +1,2 @@
-wwwroot\movies\5688efe9-78f3-487c-920b-3cb1b965f04b.jpg
-wwwroot\movies\c0294ade-efb4-49de-bb75-21d8bdac0b9c.jpg
-wwwroot\movies\d2f0ed64-72f2-4d47-ad17-9744f116e6fe.jpg
+wwwroot\artist\e541a94c-1188-4e4d-b419-380cbeeb1d57.jpg
+wwwroot\artist\5bac17d8-0105-40a6-8953-75588d5c5d72.jpg

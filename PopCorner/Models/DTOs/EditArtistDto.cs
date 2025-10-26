@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PopCorner.Models.Domains;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace PopCorner.Models.Domains
+namespace PopCorner.Models.DTOs
 {
-    public class Artist
+    public class EditArtistDto
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -20,8 +21,9 @@ namespace PopCorner.Models.Domains
         [MaxLength(2000)]
         public string? Bio { get; set; }
 
-        [Url, MaxLength(500)]
-        public string? AvatarUrl { get; set; }
-        public ICollection<MovieCredit> Credits { get; set; } = new List<MovieCredit>();
+        [MaxLength(500)]
+        public string AvatarUrl { get; set; }
+
+        public IFormFile? Avatar { get; set; }
     }
 }

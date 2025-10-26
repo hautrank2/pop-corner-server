@@ -12,8 +12,8 @@ using PopCorner.Data;
 namespace PopCorner.Migrations
 {
     [DbContext(typeof(PopCornerDbContext))]
-    [Migration("20251015160932_Init_PopCorner_DB")]
-    partial class Init_PopCorner_DB
+    [Migration("20251026160305_AddDirectorForeignKeyToMovie")]
+    partial class AddDirectorForeignKeyToMovie
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,8 +39,8 @@ namespace PopCorner.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("date");
 
                     b.Property<string>("Country")
                         .HasMaxLength(100)
@@ -189,6 +189,7 @@ namespace PopCorner.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<string>("Country")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
@@ -196,24 +197,26 @@ namespace PopCorner.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)");
 
-                    b.Property<string>("Director")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                    b.Property<Guid>("DirectorId")
+                        .HasColumnType("uuid");
 
-                    b.Property<int?>("Duration")
+                    b.Property<int>("Duration")
                         .HasColumnType("integer");
 
                     b.PrimitiveCollection<string[]>("ImgUrls")
+                        .IsRequired()
                         .HasColumnType("text[]");
 
                     b.Property<string>("PosterUrl")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("ReleaseDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -221,16 +224,19 @@ namespace PopCorner.Migrations
                         .HasColumnType("character varying(200)");
 
                     b.Property<string>("TrailerUrl")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<DateTime?>("UpdatedAt")
+                    b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("View")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DirectorId");
 
                     b.ToTable("Movies");
                 });
@@ -358,8 +364,8 @@ namespace PopCorner.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<DateTime>("Birthday")
+                        .HasColumnType("date");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -418,6 +424,17 @@ namespace PopCorner.Migrations
                     b.Navigation("Parent");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PopCorner.Models.Domains.Movie", b =>
+                {
+                    b.HasOne("PopCorner.Models.Domains.Artist", "Director")
+                        .WithMany()
+                        .HasForeignKey("DirectorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Director");
                 });
 
             modelBuilder.Entity("PopCorner.Models.Domains.MovieActor", b =>

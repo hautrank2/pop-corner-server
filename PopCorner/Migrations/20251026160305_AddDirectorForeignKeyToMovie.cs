@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PopCorner.Migrations
 {
     /// <inheritdoc />
-    public partial class Init_PopCorner_DB : Migration
+    public partial class AddDirectorForeignKeyToMovie : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,7 +20,7 @@ namespace PopCorner.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Birthday = table.Column<DateTime>(type: "date", nullable: false),
                     Country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     Bio = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
                     AvatarUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true)
@@ -59,30 +59,6 @@ namespace PopCorner.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Movies",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
-                    ReleaseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Duration = table.Column<int>(type: "integer", nullable: true),
-                    PosterUrl = table.Column<string>(type: "text", nullable: true),
-                    TrailerUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
-                    ImgUrls = table.Column<string[]>(type: "text[]", nullable: true),
-                    Director = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    Country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    View = table.Column<int>(type: "integer", nullable: false),
-                    AvgRating = table.Column<double>(type: "double precision", precision: 4, scale: 2, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Movies", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -90,7 +66,7 @@ namespace PopCorner.Migrations
                     Email = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Birthday = table.Column<DateTime>(type: "date", nullable: false),
                     AvatarUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     Role = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -102,62 +78,33 @@ namespace PopCorner.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "MovieCredit",
+                name: "Movies",
                 columns: table => new
                 {
-                    MovieId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ArtistId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreditRoleId = table.Column<int>(type: "integer", nullable: false),
-                    CharacterName = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
-                    Order = table.Column<int>(type: "integer", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "date", nullable: false),
+                    Duration = table.Column<int>(type: "integer", nullable: false),
+                    PosterUrl = table.Column<string>(type: "text", nullable: false),
+                    TrailerUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    ImgUrls = table.Column<string[]>(type: "text[]", nullable: false),
+                    DirectorId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    View = table.Column<int>(type: "integer", nullable: false),
+                    AvgRating = table.Column<double>(type: "double precision", precision: 4, scale: 2, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MovieCredit", x => new { x.MovieId, x.ArtistId, x.CreditRoleId });
+                    table.PrimaryKey("PK_Movies", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_MovieCredit_Artist_ArtistId",
-                        column: x => x.ArtistId,
+                        name: "FK_Movies_Artist_DirectorId",
+                        column: x => x.DirectorId,
                         principalTable: "Artist",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MovieCredit_CreditRole_CreditRoleId",
-                        column: x => x.CreditRoleId,
-                        principalTable: "CreditRole",
-                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_MovieCredit_Movies_MovieId",
-                        column: x => x.MovieId,
-                        principalTable: "Movies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MovieGenre",
-                columns: table => new
-                {
-                    MovieId = table.Column<Guid>(type: "uuid", nullable: false),
-                    GenreId = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MovieGenre", x => new { x.MovieId, x.GenreId });
-                    table.ForeignKey(
-                        name: "FK_MovieGenre_Genre_GenreId",
-                        column: x => x.GenreId,
-                        principalTable: "Genre",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MovieGenre_Movies_MovieId",
-                        column: x => x.MovieId,
-                        principalTable: "Movies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,6 +167,65 @@ namespace PopCorner.Migrations
                         name: "FK_MovieActor_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MovieCredit",
+                columns: table => new
+                {
+                    MovieId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ArtistId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CreditRoleId = table.Column<int>(type: "integer", nullable: false),
+                    CharacterName = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: true),
+                    Order = table.Column<int>(type: "integer", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieCredit", x => new { x.MovieId, x.ArtistId, x.CreditRoleId });
+                    table.ForeignKey(
+                        name: "FK_MovieCredit_Artist_ArtistId",
+                        column: x => x.ArtistId,
+                        principalTable: "Artist",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieCredit_CreditRole_CreditRoleId",
+                        column: x => x.CreditRoleId,
+                        principalTable: "CreditRole",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_MovieCredit_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MovieGenre",
+                columns: table => new
+                {
+                    MovieId = table.Column<Guid>(type: "uuid", nullable: false),
+                    GenreId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MovieGenre", x => new { x.MovieId, x.GenreId });
+                    table.ForeignKey(
+                        name: "FK_MovieGenre_Genre_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genre",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_MovieGenre_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -311,6 +317,11 @@ namespace PopCorner.Migrations
                 column: "GenreId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Movies_DirectorId",
+                table: "Movies",
+                column: "DirectorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Rating_MovieId",
                 table: "Rating",
                 column: "MovieId");
@@ -347,9 +358,6 @@ namespace PopCorner.Migrations
                 name: "Rating");
 
             migrationBuilder.DropTable(
-                name: "Artist");
-
-            migrationBuilder.DropTable(
                 name: "CreditRole");
 
             migrationBuilder.DropTable(
@@ -360,6 +368,9 @@ namespace PopCorner.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Artist");
         }
     }
 }

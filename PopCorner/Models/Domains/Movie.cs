@@ -27,8 +27,11 @@ namespace PopCorner.Models.Domains
         [Required, Column(TypeName = "text[]")]
         public required string[] ImgUrls { get; set; }
 
-        [Required, MaxLength(100)]
-        public string Director { get; set; } = string.Empty;
+        [Required]
+        public Guid DirectorId { get; set; }
+
+        [ForeignKey(nameof(DirectorId))]
+        public Artist Director { get; set; } = null!;
 
         [Required, MaxLength(100)]
         public string Country { get; set; } = string.Empty;

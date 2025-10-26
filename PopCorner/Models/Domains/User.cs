@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PopCorner.Models.Domains
 {
@@ -14,7 +15,8 @@ namespace PopCorner.Models.Domains
         [Required, MaxLength(100), MinLength(3)]
         public string Name { get; set; } = string.Empty;
 
-        [Required] public DateTime BirthDate { get; set; }          
+        [Required, Column(TypeName = "date")]
+        public DateTime Birthday { get; set; }          
 
         [Required, Url, MaxLength(500)]
         public string AvatarUrl { get; set; } = string.Empty;         

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PopCorner.Data;
@@ -11,9 +12,11 @@ using PopCorner.Data;
 namespace PopCorner.Migrations
 {
     [DbContext(typeof(PopCornerDbContext))]
-    partial class PopCornerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251026160652_Baseline")]
+    partial class Baseline
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

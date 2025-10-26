@@ -9,6 +9,8 @@ namespace PopCorner.Data
         public PopCornerDbContext(DbContextOptions<PopCornerDbContext> options) : base(options) { }
 
         public DbSet<Movie> Movies { get; set; }
+        public DbSet<Genre> Genre { get; set; }
+        public DbSet<Artist> Artist { get; set; }
 
         protected override void OnModelCreating(ModelBuilder b)
         {
@@ -25,7 +27,7 @@ namespace PopCorner.Data
                 .HasMaxLength(500);
 
             b.Entity<User>()
-                .Property(x => x.BirthDate)
+                .Property(x => x.Birthday)
                 .IsRequired();
 
             // ===== MOVIE =====
@@ -44,6 +46,12 @@ namespace PopCorner.Data
             b.Entity<Movie>()
                 .Property(m => m.ReleaseDate)
                 .HasColumnType("date");
+
+            b.Entity<Movie>()
+                .HasOne(m => m.Director)
+                .WithMany()
+                .HasForeignKey(m => m.DirectorId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // ===== RATING =====
             b.Entity<Rating>()

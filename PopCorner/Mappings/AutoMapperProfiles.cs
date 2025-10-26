@@ -9,6 +9,9 @@ namespace PopCorner.Mappings
         public AutoMapperProfiles()
         {
             CreateMap<Movie, CreateMovieDto>().ReverseMap();
+            CreateMap<Artist, CreateArtistDto>().ReverseMap();
+            CreateMap<Artist, EditArtistDto>().ReverseMap();
+
         }
     }
 }
