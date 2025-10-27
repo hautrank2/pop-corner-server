@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PopCorner.Data;
 using PopCorner.Models.Common;
 using PopCorner.Models.Domains;
@@ -44,6 +45,13 @@ namespace PopCorner.Controllers
 
             try
             {
+                // Check Director exist
+                bool existDirector = await dbContext.Artist.AnyAsync(a => a.Id == createMovieDto.DirectorId);
+                if (!existDirector)
+                {
+                    return BadRequest($"DirectorId {createMovieDto.DirectorId} is not exists");
+                }
+
                 posterUploadResult = await fileRepository.UploadImage(new FileImage
                 {
                     File = poster,
@@ -85,6 +93,7 @@ namespace PopCorner.Controllers
                 movie.ImgUrls = uploadedImages.Select(i => i.FullPath).ToArray();
                 movie.CreatedAt = DateTime.UtcNow;
                 movie.UpdatedAt = DateTime.UtcNow;
+                movie.MovieGenres = createMovieDto.GenreIds.Select(id => new MovieGenre { GenreId = id }).ToArray();
 
                 var createMovieResult = await movieRepository.CreateAsync(movie);
                 return Ok(createMovieResult);

@@ -229,8 +229,8 @@
         "IsRequired": false
       },
       {
-        "Name": "Director",
-        "Type": "System.String",
+        "Name": "DirectorId",
+        "Type": "System.Guid",
         "IsRequired": false
       },
       {
@@ -240,7 +240,7 @@
       },
       {
         "Name": "GenreIds",
-        "Type": "System.Collections.Generic.List\u00601[[System.Guid, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "Type": "System.Collections.Generic.List\u00601[[System.Int32, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
       },
       {

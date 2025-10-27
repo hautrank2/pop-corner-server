@@ -29,14 +29,15 @@ namespace PopCorner.Models.DTOs
         [Required, Url]
         public string TrailerUrl { get; set; } = string.Empty;
 
-        [Required, MaxLength(100)]
-        public string Director { get; set; } = string.Empty;
+        [Required]
+        public Guid DirectorId { get; set; }
 
         [Required, MaxLength(100)]
         public string Country { get; set; } = string.Empty;
 
+        [Required]
         // --- Quan hệ (ID các entity liên kết) ---
-        public List<Guid>? GenreIds { get; set; }
+        public List<int> GenreIds { get; set; } = new List<int> {};
         public List<Guid>? ActorIds { get; set; }
         public List<Guid>? CreditIds { get; set; }
     }

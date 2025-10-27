@@ -15,7 +15,7 @@ namespace PopCorner.Repositories
         }
         public async Task<PaginationResponse<Movie>> GetAllAsync(MovieQueryDto query)
         {
-            var movieQuery = dbContext.Movies.Include(x => x.MovieGenres).Include(x => x.MovieActors).AsQueryable();
+            var movieQuery = dbContext.Movies.Include(x => x.MovieGenres).ThenInclude(mg => mg.Genre).Include(x => x.MovieActors).Include(x => x.Director).AsQueryable();
             var total = await movieQuery.CountAsync();
 
             var page = Math.Max(query.Page ?? 1, 1);
