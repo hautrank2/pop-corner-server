@@ -11,6 +11,8 @@ namespace PopCorner.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genre { get; set; }
         public DbSet<Artist> Artist { get; set; }
+        public DbSet<MovieGenre> MovieGenre { get; set; }
+        public DbSet<MovieActor> MovieActor { get; set; }
 
         protected override void OnModelCreating(ModelBuilder b)
         {
@@ -29,6 +31,21 @@ namespace PopCorner.Data
             b.Entity<User>()
                 .Property(x => x.Birthday)
                 .IsRequired();
+
+            b.Entity<MovieActor>(e =>
+            {
+                e.HasKey(x => new { x.MovieId, x.ArtistId });
+
+                e.HasOne(x => x.Movie)
+                 .WithMany(m => m.MovieActors)
+                 .HasForeignKey(x => x.MovieId)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasOne(x => x.Artist)
+                 .WithMany(a => a.MovieActors)
+                 .HasForeignKey(x => x.ArtistId)
+                 .OnDelete(DeleteBehavior.Restrict);
+            });
 
             // ===== MOVIE =====
             b.Entity<Movie>()

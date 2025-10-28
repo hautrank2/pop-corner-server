@@ -38,7 +38,9 @@ namespace PopCorner.Models.DTOs
         [Required]
         // --- Quan hệ (ID các entity liên kết) ---
         public List<int> GenreIds { get; set; } = new List<int> {};
-        public List<Guid>? ActorIds { get; set; }
+
+        [Required]
+        public List<Guid> ActorIds { get; set; }
         public List<Guid>? CreditIds { get; set; }
     }
 }

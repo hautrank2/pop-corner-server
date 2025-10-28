@@ -15,7 +15,11 @@ namespace PopCorner.Repositories
         }
         public async Task<PaginationResponse<Movie>> GetAllAsync(MovieQueryDto query)
         {
-            var movieQuery = dbContext.Movies.Include(x => x.MovieGenres).ThenInclude(mg => mg.Genre).Include(x => x.MovieActors).Include(x => x.Director).AsQueryable();
+            var movieQuery = dbContext.Movies
+                .Include(x => x.Director)
+                .Include(x => x.MovieGenres).ThenInclude(mg => mg.Genre)
+                .Include(x => x.MovieActors).ThenInclude(mg => mg.Artist)
+                .AsQueryable();
             var total = await movieQuery.CountAsync();
 
             var page = Math.Max(query.Page ?? 1, 1);
@@ -55,9 +59,28 @@ namespace PopCorner.Repositories
             return entity == null ? null : entity;
         }
 
-        public Task<Movie?> UpdateAsync(Guid id, Movie region)
+        public async Task<Movie?> UpdateAsync(Guid id, Movie dto)
         {
-            throw new NotImplementedException();
+            var entity = await dbContext.Movies.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (entity == null)
+            {
+                return null;
+            }
+
+            entity.Title = dto.Title;
+            entity.Description = dto.Description;
+            entity.MovieGenres = dto.MovieGenres;
+            entity.MovieActors = dto.MovieActors;
+            entity.UpdatedAt = dto.UpdatedAt;
+            entity.Comments = dto.Comments;
+            entity.Country = dto.Country;
+            entity.ReleaseDate = dto.ReleaseDate;
+            entity.TrailerUrl = dto.TrailerUrl;
+            entity.DirectorId = dto.DirectorId;
+
+            await dbContext.SaveChangesAsync();
+            return entity;
         }
     }
 }

@@ -31,7 +31,17 @@ namespace PopCorner.Controllers
         public async Task<IActionResult> GetAll([FromQuery] MovieQueryDto movieQuery)
         {
             var res = await movieRepository.GetAllAsync(movieQuery);
-            return Ok(res);
+
+            var dto = new PaginationResponse<MovieDto>
+            {
+                Page = res.Page,
+                PageSize = res.PageSize,
+                Total = res.Total,
+                TotalPage = res.TotalPage,
+                Items = mapper.Map<List<MovieDto>>(res.Items)
+            };
+
+            return Ok(dto);
         }
 
         [HttpPost]
@@ -62,7 +72,7 @@ namespace PopCorner.Controllers
                     Folder = "/movies"
                 });
 
-                if(posterUploadResult == null)
+                if (posterUploadResult == null)
                 {
                     return BadRequest("Upload Poster failed");
                 }
@@ -94,6 +104,7 @@ namespace PopCorner.Controllers
                 movie.CreatedAt = DateTime.UtcNow;
                 movie.UpdatedAt = DateTime.UtcNow;
                 movie.MovieGenres = createMovieDto.GenreIds.Select(id => new MovieGenre { GenreId = id }).ToArray();
+                movie.MovieActors = createMovieDto.ActorIds.Select(id => new MovieActor { ArtistId = id }).ToArray();
 
                 var createMovieResult = await movieRepository.CreateAsync(movie);
                 return Ok(createMovieResult);
@@ -128,6 +139,66 @@ namespace PopCorner.Controllers
                     : "Rollback successfully (all files deleted).";
 
                 return BadRequest($"Create movie failed: {ex.Message}\n{removeMessage}");
+            }
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromForm] EditMovieDto dto)
+        {
+            try
+            {
+                var oldDto = await dbContext.Movies
+                            .Include(m => m.MovieGenres)
+                            .Include(m => m.MovieActors)
+                            .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (oldDto == null)
+                {
+                    return BadRequest($"Movie with {id} is not exists");
+                }
+                // Check Director exist
+                bool existDirector = await dbContext.Artist.AnyAsync(a => a.Id == dto.DirectorId);
+                if (!existDirector)
+                {
+                    return BadRequest($"DirectorId {dto.DirectorId} is not exists");
+                }
+
+                // Sync Many to Many MovieGenre
+                var newGenreIds = dto.GenreIds.ToHashSet();
+                var oldGenreIds = oldDto.MovieGenres.Select(x => x.GenreId).ToHashSet();
+                var toAddGenres = newGenreIds.Except(oldGenreIds)
+                    .Select(gid => new MovieGenre { MovieId = id, GenreId = gid })
+                    .ToList();
+                var toRemoveGenres = oldDto.MovieGenres.Where(mg => !newGenreIds.Contains(mg.GenreId)).ToList();
+
+                if (toRemoveGenres.Count > 0) dbContext.MovieGenre.RemoveRange(toRemoveGenres);
+                if (toAddGenres.Count > 0) await dbContext.MovieGenre.AddRangeAsync(toAddGenres);
+
+                // Sync Many to Many MovieActor
+                var newActorIds = dto.ActorIds.ToHashSet();
+                var oldActorIds = oldDto.MovieActors.Select(x => x.ArtistId).ToHashSet();
+
+                var toAddActors = newActorIds.Except(oldActorIds)
+                    .Select(aid => new MovieActor { MovieId = id, ArtistId = aid })
+                    .ToList();
+                var toRemoveActors = oldDto.MovieActors.Where(ma => !newActorIds.Contains(ma.ArtistId)).ToList();
+
+                if (toRemoveActors.Count > 0) dbContext.MovieActor.RemoveRange(toRemoveActors);
+                if (toAddActors.Count > 0) await dbContext.MovieActor.AddRangeAsync(toAddActors);
+
+                var movie = mapper.Map<Movie>(dto);
+                movie.PosterUrl = oldDto.PosterUrl;
+                movie.ImgUrls = oldDto.ImgUrls;
+                movie.UpdatedAt = DateTime.UtcNow;
+                movie.MovieGenres = toAddGenres;
+                movie.MovieActors = toAddActors;
+
+                var result = await movieRepository.UpdateAsync(id, movie);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Create movie failed: {ex.Message}");
             }
         }
 
@@ -191,6 +262,13 @@ namespace PopCorner.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+            var res = await movieRepository.GetByIdAsync(id);
+            return Ok(res);
+        }
         async Task<(bool deleted, string? error)> DeleteAvt(string url)
         {
             try

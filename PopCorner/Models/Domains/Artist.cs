@@ -23,5 +23,7 @@ namespace PopCorner.Models.Domains
         [Url, MaxLength(500)]
         public string? AvatarUrl { get; set; }
         public ICollection<MovieCredit> Credits { get; set; } = new List<MovieCredit>();
+        public ICollection<MovieActor> MovieActors { get; set; } = new List<MovieActor>();
+
     }
 }
