@@ -1,7 +1,6 @@
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\42f7eb36-ee48-490b-aee4-15d4ba61b3ef.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\6624651d-e76c-49e2-8fff-98a0130b84c2.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\781681c0-283e-4555-bba9-cc8bc24d883d.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\b8efd4a3-4ef3-45af-8328-082403735b06.png
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\359664d8-3a9a-4866-ba09-6a2ce06e6acc.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\7abb91ce-7636-4573-b6e4-4c5388fed3c6.png
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\5e8a86c4-2e61-4830-b52a-2feeeba86279.jpg
+D:\web\pop-corner-server\PopCorner\wwwroot\movies\ae19ce66-c597-418e-ab49-fc75c87980e6.jpg
+D:\web\pop-corner-server\PopCorner\wwwroot\movies\8dc0ba27-986b-4f0d-b383-26e5a5f1b77c.jpg
+D:\web\pop-corner-server\PopCorner\wwwroot\movies\ef10d861-18da-40f4-a873-88fe0e31af5d.jpg
+D:\web\pop-corner-server\PopCorner\wwwroot\movies\1dd652ba-240d-442b-bb8e-7afd7a797ae9.jpg
+D:\web\pop-corner-server\PopCorner\wwwroot\movies\7956a308-4802-4c8b-aca2-dd4849bb532f.jpg
+D:\web\pop-corner-server\PopCorner\wwwroot\movies\d12d4e3f-80c8-47db-a175-e4402df1d550.png

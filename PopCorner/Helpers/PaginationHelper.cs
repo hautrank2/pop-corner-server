@@ -38,6 +38,7 @@ namespace PopCorner.Helpers
                 Page = pageNumber,
                 PageSize = size,
                 TotalPage = totalPage,
+                Total = total,
                 Items = items
             };
         }

@@ -7,6 +7,7 @@ using PopCorner.Models.Domains;
 using PopCorner.Models.DTOs;
 using PopCorner.Repositories;
 using PopCorner.Repositories.Interfaces;
+using System.Text.Json;
 
 namespace PopCorner.Controllers
 {
@@ -49,6 +50,12 @@ namespace PopCorner.Controllers
         {
             var poster = createMovieDto.Poster;
             var imgFiles = createMovieDto.ImgFiles;
+
+            var countA = createMovieDto.ImgFiles?.Count ?? 0;
+            var countB = Request.Form.Files.Count;
+
+            Console.WriteLine($"File {countA} {countB}");
+
 
             FileImage? posterUploadResult = null;
             List<FileImage> uploadedImages = new();
@@ -99,6 +106,17 @@ namespace PopCorner.Controllers
                 }
 
                 var movie = mapper.Map<Movie>(createMovieDto);
+                foreach (var f in Request.Form.Files)
+                    Console.WriteLine($"[Raw] {f.Name} -> {f.FileName} ({f.Length} bytes)");
+
+                Console.WriteLine("createMovieDto");
+                Console.WriteLine(JsonSerializer.Serialize(createMovieDto, new JsonSerializerOptions { WriteIndented = true }));
+
+                Console.WriteLine("Uploaded Images:");
+                Console.WriteLine(JsonSerializer.Serialize(uploadedImages, new JsonSerializerOptions { WriteIndented = true }));
+
+                Console.WriteLine("Movie object:");
+                Console.WriteLine(JsonSerializer.Serialize(movie, new JsonSerializerOptions { WriteIndented = true }));
                 movie.PosterUrl = posterUploadResult.FullPath;
                 movie.ImgUrls = uploadedImages.Select(i => i.FullPath).ToArray();
                 movie.CreatedAt = DateTime.UtcNow;
@@ -143,7 +161,7 @@ namespace PopCorner.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update([FromRoute] Guid id, [FromForm] EditMovieDto dto)
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] EditMovieDto dto)
         {
             try
             {
@@ -192,6 +210,8 @@ namespace PopCorner.Controllers
                 movie.UpdatedAt = DateTime.UtcNow;
                 movie.MovieGenres = toAddGenres;
                 movie.MovieActors = toAddActors;
+
+                await dbContext.SaveChangesAsync();
 
                 var result = await movieRepository.UpdateAsync(id, movie);
                 return Ok(result);

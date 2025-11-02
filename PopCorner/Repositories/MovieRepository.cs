@@ -20,6 +20,7 @@ namespace PopCorner.Repositories
                 .Include(x => x.MovieGenres).ThenInclude(mg => mg.Genre)
                 .Include(x => x.MovieActors).ThenInclude(mg => mg.Artist)
                 .AsQueryable();
+
             var total = await movieQuery.CountAsync();
 
             var page = Math.Max(query.Page ?? 1, 1);
@@ -30,8 +31,9 @@ namespace PopCorner.Repositories
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize).ToListAsync();
 
-            return new PaginationResponse<Movie> { Page = page, TotalPage = totalPage, PageSize = pageSize, Items = movies };
+            return new PaginationResponse<Movie> { Page = page, TotalPage = totalPage, PageSize = pageSize, Total = total, Items = movies };
         }
+        
         public async Task<Movie> CreateAsync(Movie movie)
         {
             await dbContext.Movies.AddAsync(movie);
@@ -70,8 +72,6 @@ namespace PopCorner.Repositories
 
             entity.Title = dto.Title;
             entity.Description = dto.Description;
-            entity.MovieGenres = dto.MovieGenres;
-            entity.MovieActors = dto.MovieActors;
             entity.UpdatedAt = dto.UpdatedAt;
             entity.Comments = dto.Comments;
             entity.Country = dto.Country;
