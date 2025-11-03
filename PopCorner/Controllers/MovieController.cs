@@ -106,17 +106,7 @@ namespace PopCorner.Controllers
                 }
 
                 var movie = mapper.Map<Movie>(createMovieDto);
-                foreach (var f in Request.Form.Files)
-                    Console.WriteLine($"[Raw] {f.Name} -> {f.FileName} ({f.Length} bytes)");
 
-                Console.WriteLine("createMovieDto");
-                Console.WriteLine(JsonSerializer.Serialize(createMovieDto, new JsonSerializerOptions { WriteIndented = true }));
-
-                Console.WriteLine("Uploaded Images:");
-                Console.WriteLine(JsonSerializer.Serialize(uploadedImages, new JsonSerializerOptions { WriteIndented = true }));
-
-                Console.WriteLine("Movie object:");
-                Console.WriteLine(JsonSerializer.Serialize(movie, new JsonSerializerOptions { WriteIndented = true }));
                 movie.PosterUrl = posterUploadResult.FullPath;
                 movie.ImgUrls = uploadedImages.Select(i => i.FullPath).ToArray();
                 movie.CreatedAt = DateTime.UtcNow;
@@ -289,6 +279,58 @@ namespace PopCorner.Controllers
             var res = await movieRepository.GetByIdAsync(id);
             return Ok(res);
         }
+
+        [HttpPut]
+        [Route("{id:Guid}/poster")]
+        public async Task<IActionResult> UpdatePoster([FromRoute] Guid id, [FromForm] MovieUpdatePosterDto dto)
+        {
+            try
+            {
+                var movie = await dbContext.Movies
+                            .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (movie == null)
+                {
+                    return NotFound($"Movie with id {id.ToString()} not exist");
+                }
+
+                IFormFile file = dto.Poster;
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("Invalid file.");
+                }
+
+                if (!file.ContentType.StartsWith("image/"))
+                {
+                    return BadRequest("File must be an image.");
+                }
+
+
+                var imgRes = await fileRepository.UploadImage(new FileImage
+                {
+                    File = file,
+                    FileDescription = "Movie poster",
+                    FileExtension = Path.GetExtension(file.FileName),
+                    FileSizeInBytes = file.Length,
+                    FileName = Guid.NewGuid().ToString(),
+                    Folder = "/movies"
+                });
+
+                await DeleteAvt(movie.PosterUrl);
+
+                movie.UpdatedAt = DateTime.UtcNow;
+                movie.PosterUrl = imgRes.FullPath;
+
+                await dbContext.SaveChangesAsync();
+
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         async Task<(bool deleted, string? error)> DeleteAvt(string url)
         {
             try

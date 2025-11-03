@@ -310,6 +310,27 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "PopCorner.Controllers.MovieController",
+    "Method": "UpdatePoster",
+    "RelativePath": "api/movie/{id}/poster",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "Poster",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PopCorner.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

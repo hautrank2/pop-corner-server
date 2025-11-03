@@ -1,6 +1,1 @@
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\ae19ce66-c597-418e-ab49-fc75c87980e6.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\8dc0ba27-986b-4f0d-b383-26e5a5f1b77c.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\ef10d861-18da-40f4-a873-88fe0e31af5d.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\1dd652ba-240d-442b-bb8e-7afd7a797ae9.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\7956a308-4802-4c8b-aca2-dd4849bb532f.jpg
-D:\web\pop-corner-server\PopCorner\wwwroot\movies\d12d4e3f-80c8-47db-a175-e4402df1d550.png
+D:\web\pop-corner-server\PopCorner\wwwroot\movies\52577c68-dc3f-437c-b92a-f9f762d02508.jpg
