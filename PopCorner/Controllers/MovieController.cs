@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using PopCorner.Data;
 using PopCorner.Models.Common;
 using PopCorner.Models.Domains;
@@ -320,6 +321,100 @@ namespace PopCorner.Controllers
 
                 movie.UpdatedAt = DateTime.UtcNow;
                 movie.PosterUrl = imgRes.FullPath;
+
+                await dbContext.SaveChangesAsync();
+
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        [Route("{id:Guid}/images")]
+        public async Task<IActionResult> AddImage([FromRoute] Guid id, [FromForm] FilesDto dto)
+        {
+            try
+            {
+                var movie = await dbContext.Movies.FirstOrDefaultAsync(m => m.Id == id);
+                if (movie == null)
+                {
+                    return NotFound($"Movie with id {id} not exist");
+                }
+
+                // Lấy danh sách file upload
+                var files = dto.Files;
+                if (files == null || !files.Any())
+                {
+                    return BadRequest("No files uploaded.");
+                }
+
+                // Đảm bảo mảng ImgUrls không null
+                var imgUrls = (movie.ImgUrls ?? Array.Empty<string>()).ToList();
+
+                foreach (var file in files)
+                {
+                    if (file.Length == 0)
+                        return BadRequest("File is empty.");
+
+                    if (!file.ContentType.StartsWith("image/"))
+                        return BadRequest("All files must be images.");
+
+                    var imgRes = await fileRepository.UploadImage(new FileImage
+                    {
+                        File = file,
+                        FileDescription = "Movie image",
+                        FileExtension = Path.GetExtension(file.FileName),
+                        FileSizeInBytes = file.Length,
+                        FileName = Guid.NewGuid().ToString(),
+                        Folder = "/movies"
+                    });
+
+                    imgUrls.Add(imgRes.FullPath);
+                }
+
+                movie.ImgUrls = imgUrls.ToArray();
+                movie.UpdatedAt = DateTime.UtcNow;
+
+                await dbContext.SaveChangesAsync();
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id:Guid}/images/{imgIndex:int}")]
+        public async Task<IActionResult> DeleteImage([FromRoute] Guid id, [FromRoute] int imgIndex)
+        {
+            try
+            {
+                var movie = await dbContext.Movies
+                            .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (movie == null)
+                {
+                    return NotFound($"Movie with id {id.ToString()} not exist");
+                }
+
+                if (imgIndex < 0 || movie.ImgUrls == null || imgIndex >= movie.ImgUrls.Length)
+                {
+                    return BadRequest("Image index invalid");
+                }
+
+                var deleteImgUrl = movie.ImgUrls[imgIndex];
+                await DeleteAvt(deleteImgUrl);
+
+                var imgUrls = movie.ImgUrls.ToList();
+
+                imgUrls.RemoveAt(imgIndex);
+                movie.UpdatedAt = DateTime.UtcNow;
+                movie.ImgUrls = imgUrls.ToArray();
 
                 await dbContext.SaveChangesAsync();
 

@@ -311,6 +311,48 @@
   },
   {
     "ContainingType": "PopCorner.Controllers.MovieController",
+    "Method": "AddImage",
+    "RelativePath": "api/movie/{id}/images",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "Files",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile[]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PopCorner.Controllers.MovieController",
+    "Method": "DeleteImage",
+    "RelativePath": "api/movie/{id}/images/{imgIndex}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "imgIndex",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PopCorner.Controllers.MovieController",
     "Method": "UpdatePoster",
     "RelativePath": "api/movie/{id}/poster",
     "HttpMethod": "PUT",

@@ -4,8 +4,5 @@ wwwroot\movies\388fa43e-e02f-41fd-9cd7-3d7e4ab07bd9.jpg
 wwwroot\movies\46ca3f68-9667-48b0-b239-34f9a4dc25de.jpg
 wwwroot\movies\4958094c-836d-41fe-89cf-c1ef003a97ca.jpg
 wwwroot\movies\74039fcf-4cb2-43f3-8e36-861384818ac3.jpg
-wwwroot\movies\7b87ded0-1b7f-4f13-8b4a-26b52d5ebf79.jpg
-wwwroot\movies\be3cba78-98b7-4a48-bf72-108a6757f9d4.jpg
 wwwroot\movies\c24c94ba-ab47-456a-99c1-280a1afda95d.jpg
-wwwroot\movies\c8c74968-b39f-4ae7-8d38-dfdf44233bed.avif
-wwwroot\movies\52577c68-dc3f-437c-b92a-f9f762d02508.jpg
+wwwroot\movies\e7d8824d-6768-4190-b6d2-36b82cd79bdc.jpg
