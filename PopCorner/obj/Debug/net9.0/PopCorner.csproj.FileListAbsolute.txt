@@ -189,3 +189,5 @@ D:\web\pop-corner-server\PopCorner\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Wo
 D:\web\pop-corner-server\PopCorner\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\web\pop-corner-server\PopCorner\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 D:\web\pop-corner-server\PopCorner\bin\Debug\net9.0\PopCorner.staticwebassets.runtime.json
+D:\web\pop-corner-server\PopCorner\bin\Debug\net9.0\CloudinaryDotNet.dll
+D:\web\pop-corner-server\PopCorner\bin\Debug\net9.0\Newtonsoft.Json.dll

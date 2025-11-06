@@ -124,6 +124,53 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "PopCorner.Controllers.CloudinaryController",
+    "Method": "UploadFile",
+    "RelativePath": "api/cloudinary",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Pathname",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "PopCorner.Controllers.CloudinaryController",
+    "Method": "UploadFile",
+    "RelativePath": "api/cloudinary/upload-image",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "File",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Folder",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FileDescription",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "PopCorner.Controllers.FileController",
     "Method": "UploadFile",
     "RelativePath": "api/file/upload-image",

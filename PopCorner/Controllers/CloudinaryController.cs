@@ -1,18 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PopCorner.Models.Common;
 using PopCorner.Models.DTOs;
-using PopCorner.Repositories.Interfaces;
+using PopCorner.Service.Interfaces;
 
 namespace PopCorner.Controllers
 {
+    [Route("/api/cloudinary")]
     [ApiController]
-    [Route("api/file")]
-    public class FileController : Controller
+    public class CloudinaryController : Controller
     {
-        private readonly IFileRepository fileRepository;
-        public FileController(IFileRepository fileRepository)
+
+        private readonly ICloudnaryService cloudnaryService;
+        public CloudinaryController(ICloudnaryService cloudnaryService)
         {
-            this.fileRepository = fileRepository;
+            this.cloudnaryService = cloudnaryService;
         }
 
         [HttpPost]
@@ -28,8 +29,16 @@ namespace PopCorner.Controllers
                 FileDescription = dto.FileDescription,
                 Folder = dto.Folder
             };
-            var result = await fileRepository.UploadImage(body);
+            var result = await cloudnaryService.UploadImage(body);
 
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> UploadFile([FromQuery] RemoveFileDto dto)
+        {
+            Console.WriteLine($"Delete publicID {dto.Pathname}");
+            var result = await cloudnaryService.RemoveFileByPathName(dto.Pathname);
             return Ok(result);
         }
     }

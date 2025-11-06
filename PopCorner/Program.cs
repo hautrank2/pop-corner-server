@@ -1,8 +1,13 @@
+using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PopCorner.Data;
 using PopCorner.Mappings;
+using PopCorner.Models.Common;
 using PopCorner.Repositories;
 using PopCorner.Repositories.Interfaces;
+using PopCorner.Service;
+using PopCorner.Service.Interfaces;
 
 var CORS_NAME = "AllowFrontend";
 
@@ -52,6 +57,17 @@ builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
 
 
+builder.Services.AddScoped<ICloudnaryService, CloudinaryService>();
+builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+builder.Services.AddSingleton(sp =>
+{
+    var s = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
+    var account = new Account(s.CloudName, s.ApiKey, s.ApiSecret);
+    var cld = new Cloudinary(account) { Api = { Secure = s.Secure } };
+    return cld;
+});
+
+
 // 2. Build app
 var app = builder.Build();
 
@@ -62,6 +78,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseCors(CORS_NAME);
 

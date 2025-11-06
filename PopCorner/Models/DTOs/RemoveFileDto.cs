@@ -1,8 +1,11 @@
-﻿namespace PopCorner.Models.DTOs
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace PopCorner.Models.DTOs
 {
     public class RemoveFileDto
     {
-        public string PathName { get; set; } = String.Empty;
+        [Required]
+        public string Pathname { get; set; } = String.Empty;
         
     }
 }
