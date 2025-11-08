@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PopCorner.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDirectorForeignKeyToMovie : Migration
+    public partial class InitDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -147,26 +147,25 @@ namespace PopCorner.Migrations
                 name: "MovieActor",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ArtistId = table.Column<Guid>(type: "uuid", nullable: false),
                     MovieId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Score = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MovieActor", x => x.Id);
+                    table.PrimaryKey("PK_MovieActor", x => new { x.MovieId, x.ArtistId });
+                    table.ForeignKey(
+                        name: "FK_MovieActor_Artist_ArtistId",
+                        column: x => x.ArtistId,
+                        principalTable: "Artist",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_MovieActor_Movies_MovieId",
                         column: x => x.MovieId,
                         principalTable: "Movies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_MovieActor_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -287,14 +286,9 @@ namespace PopCorner.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MovieActor_MovieId",
+                name: "IX_MovieActor_ArtistId",
                 table: "MovieActor",
-                column: "MovieId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MovieActor_UserId",
-                table: "MovieActor",
-                column: "UserId");
+                column: "ArtistId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MovieCredit_ArtistId",

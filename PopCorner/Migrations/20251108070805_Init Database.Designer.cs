@@ -12,8 +12,8 @@ using PopCorner.Data;
 namespace PopCorner.Migrations
 {
     [DbContext(typeof(PopCornerDbContext))]
-    [Migration("20251026160305_AddDirectorForeignKeyToMovie")]
-    partial class AddDirectorForeignKeyToMovie
+    [Migration("20251108070805_Init Database")]
+    partial class InitDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -243,30 +243,24 @@ namespace PopCorner.Migrations
 
             modelBuilder.Entity("PopCorner.Models.Domains.MovieActor", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("MovieId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ArtistId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("MovieId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
+                    b.HasKey("MovieId", "ArtistId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("MovieId");
-
-                    b.HasIndex("UserId");
+                    b.HasIndex("ArtistId");
 
                     b.ToTable("MovieActor");
                 });
@@ -439,21 +433,21 @@ namespace PopCorner.Migrations
 
             modelBuilder.Entity("PopCorner.Models.Domains.MovieActor", b =>
                 {
+                    b.HasOne("PopCorner.Models.Domains.Artist", "Artist")
+                        .WithMany("MovieActors")
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("PopCorner.Models.Domains.Movie", "Movie")
                         .WithMany("MovieActors")
                         .HasForeignKey("MovieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PopCorner.Models.Domains.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Artist");
 
                     b.Navigation("Movie");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PopCorner.Models.Domains.MovieCredit", b =>
@@ -524,6 +518,8 @@ namespace PopCorner.Migrations
             modelBuilder.Entity("PopCorner.Models.Domains.Artist", b =>
                 {
                     b.Navigation("Credits");
+
+                    b.Navigation("MovieActors");
                 });
 
             modelBuilder.Entity("PopCorner.Models.Domains.Comment", b =>
