@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "D:\\web\\pop-corner-server\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\service\\interfaces\\icloudnaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\service\\interfaces\\icloudnaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\controllers\\artistcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\controllers\\artistcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\controllers\\filecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\controllers\\filecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\service\\interfaces\\icloudinaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\service\\interfaces\\icloudinaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\service\\cloudinaryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,22 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\controllers\\cloudinarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\controllers\\cloudinarycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\models\\dtos\\removefiledto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\models\\dtos\\removefiledto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\controllers\\filecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\controllers\\filecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\controllers\\genrecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\controllers\\genrecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|d:\\web\\pop-corner-server\\popcorner\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E10E5D6A-648F-415D-9C25-64784601C93E}|PopCorner\\PopCorner.csproj|solutionrelative:popcorner\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,86 +34,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 234,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ICloudnaryService.cs",
-              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Service\\Interfaces\\ICloudnaryService.cs",
-              "RelativeDocumentMoniker": "PopCorner\\Service\\Interfaces\\ICloudnaryService.cs",
-              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Service\\Interfaces\\ICloudnaryService.cs",
-              "RelativeToolTip": "PopCorner\\Service\\Interfaces\\ICloudnaryService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-06T16:19:22.3Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "FileController.cs",
-              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\FileController.cs",
-              "RelativeDocumentMoniker": "PopCorner\\Controllers\\FileController.cs",
-              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\FileController.cs",
-              "RelativeToolTip": "PopCorner\\Controllers\\FileController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-06T15:33:57.725Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "GenreController.cs",
-              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\GenreController.cs",
-              "RelativeDocumentMoniker": "PopCorner\\Controllers\\GenreController.cs",
-              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\GenreController.cs",
-              "RelativeToolTip": "PopCorner\\Controllers\\GenreController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-06T15:33:57.116Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "MovieController.cs",
-              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\MovieController.cs",
-              "RelativeDocumentMoniker": "PopCorner\\Controllers\\MovieController.cs",
-              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\MovieController.cs",
-              "RelativeToolTip": "PopCorner\\Controllers\\MovieController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-06T15:33:56.485Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "RemoveFileDto.cs",
-              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Models\\DTOs\\RemoveFileDto.cs",
-              "RelativeDocumentMoniker": "PopCorner\\Models\\DTOs\\RemoveFileDto.cs",
-              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Models\\DTOs\\RemoveFileDto.cs",
-              "RelativeToolTip": "PopCorner\\Models\\DTOs\\RemoveFileDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-06T15:33:41.594Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "CloudinaryService.cs",
-              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Service\\CloudinaryService.cs",
-              "RelativeDocumentMoniker": "PopCorner\\Service\\CloudinaryService.cs",
-              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Service\\CloudinaryService.cs",
-              "RelativeToolTip": "PopCorner\\Service\\CloudinaryService.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAwwDkAAABjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-11-06T15:26:29.087Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
@@ -125,12 +43,77 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "FileController.cs",
+              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\FileController.cs",
+              "RelativeDocumentMoniker": "PopCorner\\Controllers\\FileController.cs",
+              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\FileController.cs",
+              "RelativeToolTip": "PopCorner\\Controllers\\FileController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T04:12:46.707Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ICloudinaryService.cs",
+              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Service\\Interfaces\\ICloudinaryService.cs",
+              "RelativeDocumentMoniker": "PopCorner\\Service\\Interfaces\\ICloudinaryService.cs",
+              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Service\\Interfaces\\ICloudinaryService.cs",
+              "RelativeToolTip": "PopCorner\\Service\\Interfaces\\ICloudinaryService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T04:10:48.459Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MovieController.cs",
+              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\MovieController.cs",
+              "RelativeDocumentMoniker": "PopCorner\\Controllers\\MovieController.cs",
+              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\MovieController.cs",
+              "RelativeToolTip": "PopCorner\\Controllers\\MovieController.cs",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAIwIIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T04:09:45.9Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "CloudinaryService.cs",
+              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Service\\CloudinaryService.cs",
+              "RelativeDocumentMoniker": "PopCorner\\Service\\CloudinaryService.cs",
+              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Service\\CloudinaryService.cs",
+              "RelativeToolTip": "PopCorner\\Service\\CloudinaryService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T03:43:45.323Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ArtistController.cs",
+              "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\ArtistController.cs",
+              "RelativeDocumentMoniker": "PopCorner\\Controllers\\ArtistController.cs",
+              "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\ArtistController.cs",
+              "RelativeToolTip": "PopCorner\\Controllers\\ArtistController.cs",
+              "ViewState": "AgIAAEQAAAAAAAAAAAAIwKoAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-08T03:41:21.236Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "CloudinaryController.cs",
               "DocumentMoniker": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\CloudinaryController.cs",
               "RelativeDocumentMoniker": "PopCorner\\Controllers\\CloudinaryController.cs",
               "ToolTip": "D:\\web\\pop-corner-server\\PopCorner\\Controllers\\CloudinaryController.cs",
               "RelativeToolTip": "PopCorner\\Controllers\\CloudinaryController.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA1wCQAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-11-05T15:46:33.923Z",
               "EditorCaption": ""

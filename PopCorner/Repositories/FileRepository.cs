@@ -48,9 +48,8 @@ namespace PopCorner.Repositories
             // 5. Set paths
             var req = httpContextAccessor.HttpContext!.Request;
             var urlFolder = string.IsNullOrEmpty(folder) ? "" : folder.Replace('\\', '/').Trim('/') + "/";
-            var fullPath = $"/{urlFolder}{fileName}";
-            image.FilePath = $"{req.Scheme}://{req.Host}{fullPath}";
-            image.FullPath = fullPath;
+            var filePath = $"/{urlFolder}{fileName}";
+            image.FilePath = filePath;
 
             return image;
         }

@@ -6,24 +6,26 @@ using System.Text.Json;
 
 namespace PopCorner.Service
 {
-    public class CloudinaryService : ICloudnaryService
+    public class CloudinaryService : ICloudinaryService
     {
         private readonly Cloudinary cloudinary;
+        private readonly string appName = "pop-corner";
         public CloudinaryService(Cloudinary cloudinary) => this.cloudinary = cloudinary;
 
         public Task<FileImage> UploadImage(FileImage image)
         {
+            var folders = new[] { appName }.Concat(image.Folder.TrimStart('/').Split('/', StringSplitOptions.RemoveEmptyEntries ));
             var uploadParams = new ImageUploadParams()
             {
                 File = new FileDescription(image.FileName, image.File.OpenReadStream()),
                 QualityAnalysis = true,
                 UseFilename = true,
                 UniqueFilename = true,
-                Folder = image.Folder,
+                Folder = $"/{String.Join("/", folders)}",
             };
             var uploadResult = cloudinary.Upload(uploadParams);
 
-            image.FullPath = $"/{uploadResult.PublicId}";
+            image.FilePath = $"/{uploadResult.PublicId}";
 
             return Task.FromResult(image);
         }
@@ -80,6 +82,5 @@ namespace PopCorner.Service
             // Ví dụ: { "folder1/a" : "deleted", "folder1/b" : "not_found" }
             return res.Deleted ?? new Dictionary<string, string>();
         }
-
     }
 }

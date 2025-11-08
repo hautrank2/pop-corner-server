@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using CloudinaryDotNet;
 using Microsoft.AspNetCore.Mvc;
 using PopCorner.Data;
 using PopCorner.Models.Common;
 using PopCorner.Models.Domains;
 using PopCorner.Models.DTOs;
 using PopCorner.Repositories.Interfaces;
+using PopCorner.Service.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PopCorner.Controllers
@@ -15,14 +17,14 @@ namespace PopCorner.Controllers
     {
         private readonly PopCornerDbContext dbContext;
         private readonly IArtistRepository artistRepository;
-        private readonly IFileRepository fileRepository;
         private readonly IMapper mapper;
-        public ArtistController(PopCornerDbContext dbContext, IArtistRepository artistRepository, IMapper mapper, IFileRepository fileRepository)
+        private readonly ICloudinaryService cloudinarySrv;
+        public ArtistController(PopCornerDbContext dbContext, IArtistRepository artistRepository, IMapper mapper, ICloudinaryService cloudinarySrv)
         {
             this.dbContext = dbContext;
             this.artistRepository = artistRepository;
             this.mapper = mapper;
-            this.fileRepository = fileRepository;
+            this.cloudinarySrv = cloudinarySrv;
         }
 
         [HttpGet]
@@ -40,9 +42,9 @@ namespace PopCorner.Controllers
             FileImage? avtRes = null;
             try
             {
-                avtRes = await fileRepository.UploadImage(new FileImage { File = avt, FileDescription = "artist avatar", FileName = Guid.NewGuid().ToString(), Folder = "/artist", FileExtension = Path.GetExtension(avt.FileName) });
+                avtRes = await cloudinarySrv.UploadImage(new FileImage { File = avt, FileDescription = "artist avatar", FileName = Guid.NewGuid().ToString(), Folder = "/artist", FileExtension = Path.GetExtension(avt.FileName) });
                 var body = mapper.Map<Artist>(dto);
-                body.AvatarUrl = avtRes.FullPath;
+                body.AvatarUrl = avtRes.FilePath;
                 var res = await artistRepository.CreateAsync(body);
                 return Ok(res);
             }
@@ -50,7 +52,7 @@ namespace PopCorner.Controllers
             {
                 if (avtRes != null)
                 {
-                    await fileRepository.RemoveFileByPathName(avtRes.FullPath);
+                    await cloudinarySrv.RemoveFileByPathName(avtRes.FilePath);
                 }
 
                 return BadRequest($"Create movie failed: {ex.Message}");
@@ -78,7 +80,7 @@ namespace PopCorner.Controllers
                 // Update new image
                 if (isNewAvt)
                 {
-                    avtRes = await fileRepository.UploadImage(new FileImage 
+                    avtRes = await cloudinarySrv.UploadImage(new FileImage 
                         { 
                             File = avt, 
                             FileDescription = "artist avatar",
@@ -90,7 +92,7 @@ namespace PopCorner.Controllers
 
                 }
                 var body = mapper.Map<Artist>(dto);
-                body.AvatarUrl = avtRes != null ? avtRes.FullPath : oldAvtUrl;
+                body.AvatarUrl = avtRes != null ? avtRes.FilePath : oldAvtUrl;
                 var res = await artistRepository.UpdateAsync(id, body);
 
                 // Remove old avatar
@@ -116,7 +118,7 @@ namespace PopCorner.Controllers
             {
                 if (avtRes != null)
                 {
-                    await fileRepository.RemoveFileByPathName(avtRes.FullPath);
+                    await cloudinarySrv.RemoveFileByPathName(avtRes.FilePath);
                 }
 
                 return BadRequest($"Create movie failed: {ex.Message}");
@@ -160,7 +162,7 @@ namespace PopCorner.Controllers
         {
             try
             {
-                var ok = await fileRepository.RemoveFileByPathName(url);
+                var ok = await cloudinarySrv.RemoveFileByPathName(url);
                 return (ok, ok ? "null" : "Unknown error when removing file");
             }
             catch (Exception ex)

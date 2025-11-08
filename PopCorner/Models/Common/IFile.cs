@@ -15,6 +15,5 @@ namespace PopCorner.Models.Common
         public long FileSizeInBytes { get; set; }
         public string FilePath { get; set; }
         public string? Folder {  get; set; }
-        public string FullPath { get; set; }
     }
 }

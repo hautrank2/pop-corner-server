@@ -19,7 +19,6 @@ namespace PopCorner.Models.Common
 
         [DefaultValue("/folder1/folder2")]
         public string Folder { get; set; } = string.Empty;
-        public string FullPath { get; set; } // /artist/faa8a3c9-1031-4ef4-9693-403fd57cf6f7.jpg
 
         // bạn có thể thêm các property riêng cho class này
         public Guid MovieId { get; set; }

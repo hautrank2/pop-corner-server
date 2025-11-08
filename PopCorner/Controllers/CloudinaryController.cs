@@ -10,8 +10,8 @@ namespace PopCorner.Controllers
     public class CloudinaryController : Controller
     {
 
-        private readonly ICloudnaryService cloudnaryService;
-        public CloudinaryController(ICloudnaryService cloudnaryService)
+        private readonly ICloudinaryService cloudnaryService;
+        public CloudinaryController(ICloudinaryService cloudnaryService)
         {
             this.cloudnaryService = cloudnaryService;
         }

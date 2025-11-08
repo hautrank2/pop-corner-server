@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using PopCorner.Data;
 using PopCorner.Models.Common;
 using PopCorner.Models.Domains;
 using PopCorner.Models.DTOs;
-using PopCorner.Repositories;
 using PopCorner.Repositories.Interfaces;
-using System.Text.Json;
+using PopCorner.Service.Interfaces;
 
 namespace PopCorner.Controllers
 {
@@ -18,14 +16,14 @@ namespace PopCorner.Controllers
     {
         private readonly PopCornerDbContext dbContext;
         private readonly IMovieRepository movieRepository;
-        private readonly IFileRepository fileRepository;
         private readonly IMapper mapper;
-        public MovieController(PopCornerDbContext dbContext, IMovieRepository movieRepository, IFileRepository fileRepository, IMapper mapper)
+        private readonly ICloudinaryService cloudinarySrv;
+        public MovieController(PopCornerDbContext dbContext, IMovieRepository movieRepository, IMapper mapper, ICloudinaryService cloudinarySrv)
         {
             this.dbContext = dbContext;
             this.movieRepository = movieRepository;
-            this.fileRepository = fileRepository;
             this.mapper = mapper;
+            this.cloudinarySrv = cloudinarySrv;
         }
 
         // GET: MovieController
@@ -70,7 +68,7 @@ namespace PopCorner.Controllers
                     return BadRequest($"DirectorId {createMovieDto.DirectorId} is not exists");
                 }
 
-                posterUploadResult = await fileRepository.UploadImage(new FileImage
+                posterUploadResult = await cloudinarySrv.UploadImage(new FileImage
                 {
                     File = poster,
                     FileExtension = Path.GetExtension(poster.FileName),
@@ -88,7 +86,7 @@ namespace PopCorner.Controllers
                 List<Task<FileImage>> uploadImgTasks = new List<Task<FileImage>>();
                 foreach (var img in createMovieDto.ImgFiles)
                 {
-                    uploadImgTasks.Add(fileRepository.UploadImage(new FileImage
+                    uploadImgTasks.Add(cloudinarySrv.UploadImage(new FileImage
                     {
                         File = img,
                         FileExtension = Path.GetExtension(img.FileName),
@@ -108,8 +106,8 @@ namespace PopCorner.Controllers
 
                 var movie = mapper.Map<Movie>(createMovieDto);
 
-                movie.PosterUrl = posterUploadResult.FullPath;
-                movie.ImgUrls = uploadedImages.Select(i => i.FullPath).ToArray();
+                movie.PosterUrl = posterUploadResult.FilePath;
+                movie.ImgUrls = uploadedImages.Select(i => i.FilePath).ToArray();
                 movie.CreatedAt = DateTime.UtcNow;
                 movie.UpdatedAt = DateTime.UtcNow;
                 movie.MovieGenres = createMovieDto.GenreIds.Select(id => new MovieGenre { GenreId = id }).ToArray();
@@ -126,16 +124,16 @@ namespace PopCorner.Controllers
                 {
                     if (posterUploadResult != null)
                     {
-                        var removed = await fileRepository.RemoveFileByPathName(posterUploadResult.FullPath);
+                        var removed = await cloudinarySrv.RemoveFileByPathName(posterUploadResult.FilePath);
                         if (!removed)
-                            removeErrors.Add($"Remove poster failed: {posterUploadResult.FullPath}");
+                            removeErrors.Add($"Remove poster failed: {posterUploadResult.FilePath}");
                     }
 
                     foreach (var fi in uploadedImages)
                     {
-                        var removed = await fileRepository.RemoveFileByPathName(fi.FullPath);
+                        var removed = await cloudinarySrv.RemoveFileByPathName(fi.FilePath);
                         if (!removed)
-                            removeErrors.Add($"Không thể xóa ảnh: {fi.FullPath}");
+                            removeErrors.Add($"Không thể xóa ảnh: {fi.FilePath}");
                     }
                 }
                 catch (Exception innerEx)
@@ -307,7 +305,7 @@ namespace PopCorner.Controllers
                 }
 
 
-                var imgRes = await fileRepository.UploadImage(new FileImage
+                var imgRes = await cloudinarySrv.UploadImage(new FileImage
                 {
                     File = file,
                     FileDescription = "Movie poster",
@@ -320,7 +318,7 @@ namespace PopCorner.Controllers
                 await DeleteAvt(movie.PosterUrl);
 
                 movie.UpdatedAt = DateTime.UtcNow;
-                movie.PosterUrl = imgRes.FullPath;
+                movie.PosterUrl = imgRes.FilePath;
 
                 await dbContext.SaveChangesAsync();
 
@@ -363,7 +361,7 @@ namespace PopCorner.Controllers
                     if (!file.ContentType.StartsWith("image/"))
                         return BadRequest("All files must be images.");
 
-                    var imgRes = await fileRepository.UploadImage(new FileImage
+                    var imgRes = await cloudinarySrv.UploadImage(new FileImage
                     {
                         File = file,
                         FileDescription = "Movie image",
@@ -373,7 +371,7 @@ namespace PopCorner.Controllers
                         Folder = "/movies"
                     });
 
-                    imgUrls.Add(imgRes.FullPath);
+                    imgUrls.Add(imgRes.FilePath);
                 }
 
                 movie.ImgUrls = imgUrls.ToArray();
@@ -430,7 +428,7 @@ namespace PopCorner.Controllers
         {
             try
             {
-                var ok = await fileRepository.RemoveFileByPathName(url);
+                var ok = await cloudinarySrv.RemoveFileByPathName(url);
                 return (ok, ok ? "null" : "Unknown error when removing file");
             }
             catch (Exception ex)
