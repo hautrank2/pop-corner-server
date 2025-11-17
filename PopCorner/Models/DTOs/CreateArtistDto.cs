@@ -15,7 +15,7 @@ namespace PopCorner.Models.DTOs
         public string? Country { get; set; }
 
         [MaxLength(2000)]
-        public string? Bio { get; set; }
+        public string?  Bio { get; set; }
 
         [Required]
         public IFormFile Avatar { get; set; } = default!;

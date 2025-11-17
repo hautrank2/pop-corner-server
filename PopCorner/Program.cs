@@ -1,6 +1,7 @@
 using CloudinaryDotNet;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using PopCorner.Data;
 using PopCorner.Mappings;
 using PopCorner.Models.Common;
@@ -39,8 +40,11 @@ builder.Services.AddHttpContextAccessor();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SupportNonNullableReferenceTypes();
+    c.MapType<IFormFile>(() => new OpenApiSchema { Type = "string", Format = "binary" });
+});
 
 // Replace this line:
 // builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
@@ -72,12 +76,9 @@ builder.Services.AddSingleton(sp =>
 var app = builder.Build();
 
 // 3. Add middlware
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.MapOpenApi();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 app.UseCors(CORS_NAME);
