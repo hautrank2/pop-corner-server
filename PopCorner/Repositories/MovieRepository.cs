@@ -18,7 +18,6 @@ namespace PopCorner.Repositories
             var movieQuery = dbContext.Movies
                 .Include(x => x.Director)
                 .Include(x => x.MovieGenres).ThenInclude(mg => mg.Genre)
-                .Include(x => x.MovieActors).ThenInclude(mg => mg.Artist)
                 .AsQueryable();
 
             var total = await movieQuery.CountAsync();

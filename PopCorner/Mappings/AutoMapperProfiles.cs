@@ -14,9 +14,7 @@ namespace PopCorner.Mappings
             CreateMap<Genre, MovieGenreDto>();
             CreateMap<Movie, MovieDto>()
               .ForMember(dest => dest.Genres,
-                  opt => opt.MapFrom(src => src.MovieGenres.Select(mg => mg.Genre)))
-              .ForMember(d => d.Actors,
-                opt => opt.MapFrom(s => s.MovieActors.Select(ma => ma.Artist)));
+                  opt => opt.MapFrom(src => src.MovieGenres.Select(mg => mg.Genre)));
 
             CreateMap<Artist, CreateArtistDto>().ReverseMap();
             CreateMap<Artist, EditArtistDto>().ReverseMap();

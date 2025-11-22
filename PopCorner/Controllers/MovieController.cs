@@ -111,7 +111,6 @@ namespace PopCorner.Controllers
                 movie.CreatedAt = DateTime.UtcNow;
                 movie.UpdatedAt = DateTime.UtcNow;
                 movie.MovieGenres = createMovieDto.GenreIds.Select(id => new MovieGenre { GenreId = id }).ToArray();
-                movie.MovieActors = createMovieDto.ActorIds.Select(id => new MovieActor { ArtistId = id }).ToArray();
 
                 var createMovieResult = await movieRepository.CreateAsync(movie);
                 return Ok(createMovieResult);
@@ -156,7 +155,6 @@ namespace PopCorner.Controllers
             {
                 var oldDto = await dbContext.Movies
                             .Include(m => m.MovieGenres)
-                            .Include(m => m.MovieActors)
                             .FirstOrDefaultAsync(m => m.Id == id);
 
                 if (oldDto == null)
@@ -181,24 +179,11 @@ namespace PopCorner.Controllers
                 if (toRemoveGenres.Count > 0) dbContext.MovieGenre.RemoveRange(toRemoveGenres);
                 if (toAddGenres.Count > 0) await dbContext.MovieGenre.AddRangeAsync(toAddGenres);
 
-                // Sync Many to Many MovieActor
-                var newActorIds = dto.ActorIds.ToHashSet();
-                var oldActorIds = oldDto.MovieActors.Select(x => x.ArtistId).ToHashSet();
-
-                var toAddActors = newActorIds.Except(oldActorIds)
-                    .Select(aid => new MovieActor { MovieId = id, ArtistId = aid })
-                    .ToList();
-                var toRemoveActors = oldDto.MovieActors.Where(ma => !newActorIds.Contains(ma.ArtistId)).ToList();
-
-                if (toRemoveActors.Count > 0) dbContext.MovieActor.RemoveRange(toRemoveActors);
-                if (toAddActors.Count > 0) await dbContext.MovieActor.AddRangeAsync(toAddActors);
-
                 var movie = mapper.Map<Movie>(dto);
                 movie.PosterUrl = oldDto.PosterUrl;
                 movie.ImgUrls = oldDto.ImgUrls;
                 movie.UpdatedAt = DateTime.UtcNow;
                 movie.MovieGenres = toAddGenres;
-                movie.MovieActors = toAddActors;
 
                 await dbContext.SaveChangesAsync();
 
