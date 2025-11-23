@@ -40,6 +40,13 @@ namespace PopCorner.Repositories
         {
             var artists = dbContext.Artist.AsQueryable();
 
+            if (!string.IsNullOrEmpty(query.Name))
+            {
+                artists = artists.Where(x => x.Name.ToLower().Contains(query.Name));
+            }
+
+            artists = PaginationHelper.ApplySorting(artists, query.OrderBy, query.OrderDirection);
+
             var result = await PaginationHelper.PaginateAsync<Artist>(artists, query.Page, query.PageSize);
           
             return result;

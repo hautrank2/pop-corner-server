@@ -17,6 +17,9 @@ namespace PopCorner.Models.DTOs
         [Required, Range(0, int.MaxValue)]
         public int Duration { get; set; }
 
+        [Range(0, int.MaxValue)]
+        public int View { get; set; } = 0;
+
         [Required, Url]
         public string TrailerUrl { get; set; } = string.Empty;
 
@@ -29,7 +32,6 @@ namespace PopCorner.Models.DTOs
         [Required]
         // --- Quan hệ (ID các entity liên kết) ---
         public List<int> GenreIds { get; set; } = new List<int> { };
-        public List<Guid> ActorIds { get; set; } = new List<Guid> { };
-        public List<Guid>? CreditIds { get; set; }
+        public List<MovieCreditDto>? Credits { get; set; }
     }
 }

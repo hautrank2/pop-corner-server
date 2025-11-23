@@ -53,7 +53,6 @@ namespace PopCorner.Models.DTOs
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public ICollection<MovieGenreDto> Genres { get; set; } = new List<MovieGenreDto>();
-        public ICollection<MovieArtistDto> Actors { get; set; } = new List<MovieArtistDto>();
-        public ICollection<MovieCredit> Credits { get; set; } = new List<MovieCredit>();
+        public ICollection<MovieCreditResponseDto> Credits { get; set; } = new List<MovieCreditResponseDto>();
     }
 }

@@ -52,6 +52,6 @@ namespace PopCorner.Models.Domains
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public ICollection<MovieGenre> MovieGenres { get; set; } = new List<MovieGenre>();
-        public ICollection<MovieCredit> Credits { get; set; } = new List<MovieCredit>();
+        public ICollection<MovieCredit> MovieCredits { get; set; } = new List<MovieCredit>();
     }
 }

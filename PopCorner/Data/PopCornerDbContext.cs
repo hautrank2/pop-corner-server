@@ -12,7 +12,8 @@ namespace PopCorner.Data
         public DbSet<Genre> Genre { get; set; }
         public DbSet<Artist> Artist { get; set; }
         public DbSet<MovieGenre> MovieGenre { get; set; }
-
+        public DbSet<MovieCredit> MovieCredit { get; set; }
+        public DbSet<CreditRole> CreditRole { get; set; }
         protected override void OnModelCreating(ModelBuilder b)
         {
             base.OnModelCreating(b);
@@ -132,7 +133,7 @@ namespace PopCorner.Data
 
             b.Entity<MovieCredit>()
                 .HasOne(mc => mc.Movie)
-                .WithMany(m => m.Credits)
+                .WithMany(m => m.MovieCredits)
                 .HasForeignKey(mc => mc.MovieId)
                 .OnDelete(DeleteBehavior.Cascade);
 

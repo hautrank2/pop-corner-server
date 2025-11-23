@@ -19,6 +19,9 @@ namespace PopCorner.Models.DTOs
         [Required, Range(0, int.MaxValue)]
         public int Duration { get; set; }
 
+        [Range(0, int.MaxValue)]
+        public int View { get; set; } = 0;
+
         // --- Files ---
         [Required]
         public IFormFile Poster { get; set; } = default!; 

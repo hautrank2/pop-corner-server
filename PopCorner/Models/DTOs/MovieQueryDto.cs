@@ -6,5 +6,8 @@ namespace PopCorner.Models.DTOs
     {
         public int? Page { get; set; }
         public int? PageSize { get; set; }
+        public string? OrderBy { get; set; }
+        public SortDirection? OrderDirection { get; set; }
+        public string? Title { get; set; }
     }
 }

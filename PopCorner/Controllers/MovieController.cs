@@ -179,14 +179,35 @@ namespace PopCorner.Controllers
                 if (toRemoveGenres.Count > 0) dbContext.MovieGenre.RemoveRange(toRemoveGenres);
                 if (toAddGenres.Count > 0) await dbContext.MovieGenre.AddRangeAsync(toAddGenres);
 
+
+                // State: handle MovieCredits
+                if (dto.Credits != null)
+                {
+                    var oldCredits = await dbContext.MovieCredit
+                        .Where(e => e.MovieId == id)
+                        .ToListAsync();
+
+                    if (oldCredits.Count > 0)
+                        dbContext.MovieCredit.RemoveRange(oldCredits);
+
+                    var newCredits = dto.Credits.Select(c => new MovieCredit
+                    {
+                        MovieId = id,
+                        ArtistId = c.ArtistId,
+                        CreditRoleId = c.CreditRoleId,
+                        CharacterName = c.CharacterName,
+                        Order = c.Order
+                    }).ToList();
+
+                    await dbContext.MovieCredit.AddRangeAsync(newCredits);
+                }
+                await dbContext.SaveChangesAsync();
+
                 var movie = mapper.Map<Movie>(dto);
                 movie.PosterUrl = oldDto.PosterUrl;
                 movie.ImgUrls = oldDto.ImgUrls;
                 movie.UpdatedAt = DateTime.UtcNow;
                 movie.MovieGenres = toAddGenres;
-
-                await dbContext.SaveChangesAsync();
-
                 var result = await movieRepository.UpdateAsync(id, movie);
                 return Ok(result);
             }

@@ -18,10 +18,18 @@ namespace PopCorner.Repositories
             var movieQuery = dbContext.Movies
                 .Include(x => x.Director)
                 .Include(x => x.MovieGenres).ThenInclude(mg => mg.Genre)
+                .Include(x => x.MovieCredits).ThenInclude(mg => mg.CreditRole)
                 .AsQueryable();
 
-            var total = await movieQuery.CountAsync();
+            if(!string.IsNullOrEmpty(query.Title))
+            {
+                var key = query.Title.Trim().ToLower();
+                movieQuery = movieQuery.Where(x =>
+                     EF.Functions.ILike(x.Title, $"%{query.Title}%")
+                 );
+            }
 
+            var total = await movieQuery.CountAsync();
             var page = Math.Max(query.Page ?? 1, 1);
             var pageSize = Math.Max(query.PageSize ?? 10, 1);
             var totalPage = total / pageSize;
