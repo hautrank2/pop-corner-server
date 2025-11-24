@@ -15,7 +15,7 @@ namespace PopCorner.Repositories
 
         public UserRepository(PopCornerDbContext dbContext)
         {
-            dbContext = dbContext;
+            this.dbContext = dbContext;
         }
 
         // ---------------------------
@@ -46,9 +46,9 @@ namespace PopCorner.Repositories
                 users = users.Where(x => x.Role == key);
             }
 
-            users = PaginationHelper.ApplySorting(users, query.OrderBy, query.OrderDirection);
+            users = QueryHelper.ApplySorting(users, query.OrderBy, query.OrderDirection);
 
-            return await PaginationHelper.PaginateAsync(users, query.Page, query.PageSize);
+            return await QueryHelper.PaginateAsync(users, query.Page, query.PageSize);
         }
 
         // ---------------------------

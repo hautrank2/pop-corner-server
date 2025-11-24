@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace PopCorner.Helpers
 {
-    public class PaginationHelper
+    public class QueryHelper
     {
         public static async Task<PaginationResponse<T>> PaginateAsync<T>(
            IQueryable<T> query,

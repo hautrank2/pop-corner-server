@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PopCorner.Data;
+using PopCorner.Helpers;
 using PopCorner.Models.Common;
 using PopCorner.Models.Domains;
 using PopCorner.Models.DTOs;
@@ -35,10 +36,11 @@ namespace PopCorner.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSync([FromForm] AddUserDto dto)
         {
+            FileImage? avtRes = null;
             try
             {
                 var avt = dto.Avatar;
-                var avtRes = await cloudinarySrv.UploadImage(new FileImage
+                avtRes = await cloudinarySrv.UploadImage(new FileImage
                 {
                     File = avt,
                     FileExtension = Path.GetExtension(avt.FileName),
@@ -49,12 +51,17 @@ namespace PopCorner.Controllers
                 });
                 var user = mapper.Map<User>(dto);
                 user.AvatarUrl = avtRes.FilePath;
-                var addRes = userRepository.CreateAsync(user);
+                user.PasswordHash = PasswordHelper.Hash(dto.Password);
+                var addRes = await userRepository.CreateAsync(user);
 
                 return Ok(addRes);
             }
             catch (Exception ex) 
             {
+                if (avtRes != null) 
+                {
+                    await cloudinarySrv.RemoveFileByPathName(avtRes.FilePath);
+                }
                 return BadRequest(ex.Message);
             }
         }
