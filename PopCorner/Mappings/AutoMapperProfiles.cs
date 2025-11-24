@@ -24,6 +24,9 @@ namespace PopCorner.Mappings
 
             CreateMap<Artist, CreateArtistDto>().ReverseMap();
             CreateMap<Artist, EditArtistDto>().ReverseMap();
+
+            // User
+            CreateMap<User, UserDto>().ReverseMap();
         }
     }
 }

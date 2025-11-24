@@ -53,9 +53,6 @@ namespace PopCorner.Controllers
             var countA = createMovieDto.ImgFiles?.Count ?? 0;
             var countB = Request.Form.Files.Count;
 
-            Console.WriteLine($"File {countA} {countB}");
-
-
             FileImage? posterUploadResult = null;
             List<FileImage> uploadedImages = new();
 
@@ -215,6 +212,26 @@ namespace PopCorner.Controllers
             {
                 return BadRequest($"Create movie failed: {ex.Message}");
             }
+        }
+
+        [HttpPut("{id:guid}/rate")]
+        public async Task<IActionResult> RateMovie([FromRoute] Guid id, [FromBody] AddMovieRateDto dto)
+        {
+            try
+            {
+                var movie = await movieRepository.GetByIdAsync(id);
+
+                if (movie == null) 
+                {
+                    return BadRequest("Movie not found");
+                }
+
+
+            }
+            catch (Exception ex) { 
+                return BadRequest(ex.Message);
+            }
+            return Ok();
         }
 
         [HttpDelete]

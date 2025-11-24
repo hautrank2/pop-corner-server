@@ -14,6 +14,8 @@ namespace PopCorner.Data
         public DbSet<MovieGenre> MovieGenre { get; set; }
         public DbSet<MovieCredit> MovieCredit { get; set; }
         public DbSet<CreditRole> CreditRole { get; set; }
+        public DbSet<User> User { get; set; }
+
         protected override void OnModelCreating(ModelBuilder b)
         {
             base.OnModelCreating(b);
