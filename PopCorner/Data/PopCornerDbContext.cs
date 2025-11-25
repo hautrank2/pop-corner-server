@@ -27,7 +27,6 @@ namespace PopCorner.Data
 
             b.Entity<User>()
                 .Property(x => x.AvatarUrl)
-                .IsRequired()
                 .HasMaxLength(500);
 
             b.Entity<User>()

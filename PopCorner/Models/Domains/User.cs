@@ -18,7 +18,7 @@ namespace PopCorner.Models.Domains
         [Required, Column(TypeName = "date")]
         public DateTime Birthday { get; set; }          
 
-        [Required, Url, MaxLength(500)]
+        [Url, MaxLength(500)]
         public string AvatarUrl { get; set; } = string.Empty;         
 
         [MaxLength(20)] public string Role { get; set; } = "User";
