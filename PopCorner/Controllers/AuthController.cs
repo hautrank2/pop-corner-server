@@ -6,6 +6,7 @@ using PopCorner.Helpers;
 using PopCorner.Models.DTOs;
 using PopCorner.Repositories.Interfaces;
 using PopCorner.Service.Interfaces;
+using PopCorner.Services;
 
 namespace PopCorner.Controllers
 {
@@ -26,7 +27,7 @@ namespace PopCorner.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginSync([FromBody] LoginDto dto)
+        public async Task<IActionResult> LoginSync([FromBody] LoginDto dto, [FromServices] JwtService jwt)
         {
             try
             {
@@ -36,13 +37,24 @@ namespace PopCorner.Controllers
                     return BadRequest("User is not exist");
                 }
 
-                var yes = PasswordHelper.Verify(user.PasswordHash, dto.Password);
+                var yes = PasswordHelper.Verify(dto.Password, user.PasswordHash);
+                var token = jwt.GenerateToken(user.Id, user.Email, user.Role);
+                
+                if (yes) {
+                    var response = new LoginResponseDto
+                    {
+                        Id = user.Id,
+                        Email = user.Email,
+                        Name = user.Name,
+                        AvatarUrl = user.AvatarUrl,
+                        Role = user.Role,
+                        Token = token
+                    };
 
-                if (yes) { 
-                    return Ok(user);
+                    return Ok(response);
                 }
 
-                return BadRequest("Password is not correct");
+                return BadRequest("Invalid Email or password");
             }
             catch (Exception ex) {
                 return BadRequest(ex.Message);
