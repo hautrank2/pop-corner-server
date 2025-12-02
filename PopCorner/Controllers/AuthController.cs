@@ -60,5 +60,34 @@ namespace PopCorner.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("login/email")]
+        public async Task<IActionResult> LoginEmailSync([FromBody] LoginEmailDto dto, [FromServices] JwtService jwt)
+        {
+            try
+            {
+                var user = await dbContext.User.FirstOrDefaultAsync(x => x.Email == dto.Email);
+
+                if (user == null)
+                {
+                    return BadRequest("User is not exist");
+                }
+                var token = jwt.GenerateToken(user.Id, user.Email, user.Role);
+                var response = new LoginResponseDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Name = user.Name,
+                    AvatarUrl = user.AvatarUrl,
+                    Role = user.Role,
+                    Token = token
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
