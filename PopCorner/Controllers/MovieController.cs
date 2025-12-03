@@ -7,6 +7,7 @@ using PopCorner.Models.Domains;
 using PopCorner.Models.DTOs;
 using PopCorner.Repositories.Interfaces;
 using PopCorner.Service.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PopCorner.Controllers
 {
@@ -18,12 +19,14 @@ namespace PopCorner.Controllers
         private readonly IMovieRepository movieRepository;
         private readonly IMapper mapper;
         private readonly ICloudinaryService cloudinarySrv;
-        public MovieController(PopCornerDbContext dbContext, IMovieRepository movieRepository, IMapper mapper, ICloudinaryService cloudinarySrv)
+        private readonly ICommentRepository commentRepository;
+        public MovieController(PopCornerDbContext dbContext, IMovieRepository movieRepository, IMapper mapper, ICloudinaryService cloudinarySrv, ICommentRepository commenRepository)
         {
             this.dbContext = dbContext;
             this.movieRepository = movieRepository;
             this.mapper = mapper;
             this.cloudinarySrv = cloudinarySrv;
+            this.commentRepository = commenRepository;
         }
 
         // GET: MovieController
@@ -447,6 +450,23 @@ namespace PopCorner.Controllers
             }
         }
 
+
+        [HttpGet("{id:Guid}/comment")]
+        public async Task<IActionResult> GetComments([FromRoute] Guid id)
+        {
+            var query = new CommentQueryDto { MovieId = id };
+            var data = await commentRepository.GetAllAsync(query);
+            return Ok(data);
+        }
+
+        [HttpPost("{id:Guid}/comment")]
+        public async Task<IActionResult> AddComment([FromBody] AddMovieCommentDto query)
+        {
+            var body = mapper.Map<Comment>(query);
+            var data = await commentRepository.CreateAsync(body);
+            return Ok(data);
+        }
+
         async Task<(bool deleted, string? error)> DeleteAvt(string url)
         {
             try
@@ -459,5 +479,6 @@ namespace PopCorner.Controllers
                 return (false, ex.Message);
             }
         }
+
     }
 }
