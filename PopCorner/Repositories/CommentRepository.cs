@@ -23,9 +23,9 @@ namespace PopCorner.Repositories
         public async Task<Comment[]> GetAllAsync(CommentQueryDto dto)
         {
             var query = dbContext.Comment.AsQueryable();
-            if(!string.IsNullOrEmpty(dto.MovieId.ToString()))
+            if (dto.MovieId != Guid.Empty)
             {
-                query = query.Where(x => x.MovieId.ToString() == dto.MovieId.ToString());
+                query = query.Where(x => x.MovieId == dto.MovieId);
             }
             return await query.ToArrayAsync();
         }

@@ -1,7 +1,7 @@
 ﻿using PopCorner.Models.Domains;
 using System.ComponentModel.DataAnnotations;
 
-namespace PopCorner.Repositories
+namespace PopCorner.Models.DTOs
 {
     public class MovieCommentDto
     {

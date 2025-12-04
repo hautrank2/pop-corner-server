@@ -15,5 +15,7 @@ namespace PopCorner.Repositories.Interfaces
         Task<Movie?> UpdateAsync(Guid id, Movie movie);
 
         Task<Movie?> DeleteAsync(Guid id);
+
+        Task<Comment[]> GetCommentsAsync(Guid id);
     }
 }

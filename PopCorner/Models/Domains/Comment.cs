@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace PopCorner.Models.Domains
 {
@@ -16,8 +17,9 @@ namespace PopCorner.Models.Domains
         public string Content { get; set; } = string.Empty;
 
         public Guid? ParentId { get; set; } // hỗ trợ thread
+
+        [JsonIgnore]
         public Comment? Parent { get; set; }
-        public ICollection<Comment> Replies { get; set; } = new List<Comment>();
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }

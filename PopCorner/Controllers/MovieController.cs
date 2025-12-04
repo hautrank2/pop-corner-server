@@ -454,15 +454,16 @@ namespace PopCorner.Controllers
         [HttpGet("{id:Guid}/comment")]
         public async Task<IActionResult> GetComments([FromRoute] Guid id)
         {
-            var query = new CommentQueryDto { MovieId = id };
-            var data = await commentRepository.GetAllAsync(query);
+            var data = await movieRepository.GetCommentsAsync(id);
             return Ok(data);
         }
 
         [HttpPost("{id:Guid}/comment")]
-        public async Task<IActionResult> AddComment([FromBody] AddMovieCommentDto query)
+        public async Task<IActionResult> AddComment([FromRoute] Guid id, [FromBody] AddMovieCommentDto query)
         {
             var body = mapper.Map<Comment>(query);
+            body.MovieId = id;
+            body.IsEdited = false;
             var data = await commentRepository.CreateAsync(body);
             return Ok(data);
         }

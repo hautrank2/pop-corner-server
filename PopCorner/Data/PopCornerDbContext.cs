@@ -82,7 +82,7 @@ namespace PopCorner.Data
             // ===== COMMENT =====
             b.Entity<Comment>()
                 .HasOne(c => c.Parent)
-                .WithMany(p => p.Replies)
+                .WithMany()
                 .HasForeignKey(c => c.ParentId)
                 .OnDelete(DeleteBehavior.Restrict);
 

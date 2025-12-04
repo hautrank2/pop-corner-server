@@ -89,5 +89,15 @@ namespace PopCorner.Repositories
             await dbContext.SaveChangesAsync();
             return entity;
         }
+
+        public async Task<Comment[]> GetCommentsAsync(Guid id)
+        {
+            var query = dbContext.Comment.Include(x => x.User).AsNoTracking();
+            if (id != Guid.Empty)
+            {
+                query = query.Where(x => x.MovieId == id);
+            }
+            return await query.ToArrayAsync();
+        }
     }
 }

@@ -14,6 +14,7 @@ using PopCorner.Service.Interfaces;
 using PopCorner.Services;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var CORS_NAME = "AllowFrontend";
 
@@ -66,6 +67,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
+
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 
 
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
