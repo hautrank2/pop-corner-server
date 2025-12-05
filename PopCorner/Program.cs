@@ -6,12 +6,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PopCorner.Data;
 using PopCorner.Mappings;
+using PopCorner.Middlewares;
 using PopCorner.Models.Common;
 using PopCorner.Repositories;
 using PopCorner.Repositories.Interfaces;
 using PopCorner.Service;
 using PopCorner.Service.Interfaces;
 using PopCorner.Services;
+using PopCorner.Services.Interfaces;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -65,6 +67,7 @@ builder.Services.AddScoped<IGenreRepository, GenreRepository>();
 builder.Services.AddScoped<IArtistRepository, ArtistRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
 
@@ -123,10 +126,10 @@ builder.Services.AddSingleton<JwtService>();
 var app = builder.Build();
 
 // 3. Add middlware
+app.UseMiddleware<AuthMiddleware>();
 app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI();
-
 
 app.UseCors(CORS_NAME);
 

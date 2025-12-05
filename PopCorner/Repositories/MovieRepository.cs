@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using PopCorner.Data;
 using PopCorner.Models.Common;
 using PopCorner.Models.Domains;
@@ -10,8 +12,11 @@ namespace PopCorner.Repositories
     public class MovieRepository : IMovieRepository
     {
         private readonly PopCornerDbContext dbContext;
-        public MovieRepository(PopCornerDbContext dbContext) {
-            this.dbContext = dbContext;
+        private readonly IMapper mapper;
+
+        public MovieRepository(PopCornerDbContext dbContext, IMapper mapper) {
+            this.dbContext = dbContext; 
+            this.mapper = mapper;
         }
         public async Task<PaginationResponse<Movie>> GetAllAsync(MovieQueryDto query)
         {
@@ -98,6 +103,52 @@ namespace PopCorner.Repositories
                 query = query.Where(x => x.MovieId == id);
             }
             return await query.ToArrayAsync();
+        }
+
+        public async Task<Movie> Rate(Guid movieId, Guid userId, MovieRateDto dto)
+        {
+            var movie = await GetByIdAsync(movieId);
+
+            if (movie == null)
+            {
+                throw new Exception("Movie is not exist");
+            }
+
+            // Find rate
+            var rate = await dbContext.Rating.FirstOrDefaultAsync(x => x.MovieId == movieId && x.UserId == userId);
+            var rating = new Rating
+            {
+                MovieId = movieId,
+                UserId = userId,
+                Score = dto.Score,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            if (rate == null)
+            {
+                await dbContext.AddAsync(rating);
+            } else
+            {
+                rate.Score = dto.Score;
+                rate.UpdatedAt = DateTime.UtcNow;
+            }
+
+            await dbContext.SaveChangesAsync();
+
+            movie.AvgRating = await dbContext.Rating
+                .Where(x => x.MovieId == movieId)
+                .AverageAsync(x => (double)x.Score);
+            movie.UpdatedAt = DateTime.UtcNow;
+
+            await dbContext.SaveChangesAsync();
+            return movie;
+        }
+
+        public async Task<MovieRatingResponseDto[]> GetRatingSync(Guid movieId)
+        {
+            var ratings = await dbContext.Rating.Where(x => x.MovieId == movieId).Include(x => x.User).ToArrayAsync();
+            var movieRatings = mapper.Map<MovieRatingResponseDto[]>(ratings);
+            return movieRatings;
         }
     }
 }

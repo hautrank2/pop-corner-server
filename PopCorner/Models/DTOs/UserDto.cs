@@ -17,9 +17,5 @@
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
-
-        // Optional aggregated navigation data  
-        public int RatingCount { get; set; }
-        public int CommentCount { get; set; }
     }
 }

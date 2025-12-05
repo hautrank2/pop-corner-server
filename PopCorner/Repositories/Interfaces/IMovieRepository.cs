@@ -17,5 +17,8 @@ namespace PopCorner.Repositories.Interfaces
         Task<Movie?> DeleteAsync(Guid id);
 
         Task<Comment[]> GetCommentsAsync(Guid id);
+
+        Task<Movie> Rate(Guid movieId, Guid userId, MovieRateDto dto);
+        Task<MovieRatingResponseDto[]> GetRatingSync(Guid movieId);
     }
 }

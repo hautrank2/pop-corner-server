@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PopCorner.Data;
@@ -466,6 +467,23 @@ namespace PopCorner.Controllers
             body.IsEdited = false;
             var data = await commentRepository.CreateAsync(body);
             return Ok(data);
+        }
+
+        [HttpGet("{id:Guid}/rate")]
+        public async Task<IActionResult> GetRateSync([FromRoute] Guid id)
+        {
+            var movieRes = await movieRepository.GetRatingSync(id);
+            return Ok(movieRes);
+        }
+
+
+        [Authorize]
+        [HttpPost("{id:Guid}/rate")]
+        public async Task<IActionResult> Rate([FromRoute] Guid id, [FromBody] MovieRateDto dto)
+        {
+            var user = HttpContext.Items["User"] as User;
+            var movieRes = await movieRepository.Rate(id, user.Id, dto);
+            return Ok(movieRes);
         }
 
         async Task<(bool deleted, string? error)> DeleteAvt(string url)

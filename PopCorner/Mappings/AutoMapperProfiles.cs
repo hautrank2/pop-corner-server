@@ -30,7 +30,10 @@ namespace PopCorner.Mappings
             CreateMap<User, AddUserDto>().ReverseMap();
 
             // Comment
-            CreateMap<AddMovieCommentDto, Comment>().ReverseMap(); 
+            CreateMap<AddMovieCommentDto, Comment>().ReverseMap();
+
+            // Movie
+            CreateMap<Rating, MovieRatingResponseDto>().ReverseMap();
         }
     }
 }
