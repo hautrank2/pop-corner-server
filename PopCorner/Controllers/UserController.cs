@@ -66,11 +66,19 @@ namespace PopCorner.Controllers
             }
         }
 
+        [HttpGet("{id:Guid}")]
+        public async Task<IActionResult> GetByIdSync([FromRoute] Guid id)
+        {
+            var res = await userRepository.GetByIdAsync(id);
+            return Ok(res);
+        }
+
         [HttpPut("{id:Guid}")]
         public async Task<IActionResult> EditSync([FromRoute] Guid id, [FromForm] EditUserDto dto)
         {
             FileImage? newAvt = null;
             var removedAvt = false;
+
             try
             {
                 var user = await userRepository.GetByIdAsync(id);
@@ -80,15 +88,9 @@ namespace PopCorner.Controllers
                     return BadRequest("User not found");
                 }
 
-                // If New Password
-                if(!string.IsNullOrEmpty(dto.Password))
-                {
-                    user.PasswordHash = PasswordHelper.Hash(dto.Password);
-                }
-
                 // If New Avatar
                 var oldAvtUrl = user.AvatarUrl;
-                if(dto.Avatar != null)
+                if (dto.Avatar != null)
                 {
                     newAvt = await cloudinarySrv.UploadImage(new FileImage
                     {
@@ -101,11 +103,10 @@ namespace PopCorner.Controllers
                     });
                     user.AvatarUrl = newAvt.FilePath;
                 }
-
                 user.Name = dto.Name;
-                user.Email = dto.Email;
                 user.UpdatedAt = DateTime.UtcNow;
 
+                user.UpdatedAt = DateTime.UtcNow;
                 var res = await userRepository.UpdateAsync(id, user);
                 // Remove old avatar
                 if (newAvt != null && !string.IsNullOrEmpty(oldAvtUrl))
@@ -116,13 +117,14 @@ namespace PopCorner.Controllers
             }
             catch (Exception ex) 
             {
-                if(newAvt != null)
+                if (newAvt != null)
                 {
                     await cloudinarySrv.RemoveFileByPathName(newAvt.FilePath);
                 }
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpDelete("{id:Guid}")]
         public async Task<IActionResult> DeleteSync([FromRoute] Guid id)

@@ -89,5 +89,7 @@ namespace PopCorner.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("{id}")]
     }
 }

@@ -4,15 +4,6 @@ namespace PopCorner.Models.DTOs
 {
     public class EditUserDto
     {
-        [Required(ErrorMessage = "Email is required.")]
-        [EmailAddress(ErrorMessage = "Invalid email format.")]
-        [MaxLength(255, ErrorMessage = "Email must not exceed 255 characters.")]
-        public string Email { get; set; } = string.Empty;
-
-        [MinLength(6, ErrorMessage = "Password must be at least 6 characters long.")]
-        [MaxLength(100, ErrorMessage = "Password must not exceed 100 characters.")]
-        public string? Password { get; set; } = string.Empty;
-
         [Required(ErrorMessage = "Name is required.")]
         [MinLength(3, ErrorMessage = "Name must be at least 3 characters long.")]
         [MaxLength(100, ErrorMessage = "Name must not exceed 100 characters.")]
@@ -23,7 +14,6 @@ namespace PopCorner.Models.DTOs
         public DateTime Birthday { get; set; }
 
         [DataType(DataType.Upload)]
-        public IFormFile? Avatar { get; set; } = null!;
-        public string? Role { get; set; }
+        public IFormFile Avatar { get; set; } = null!;
     }
 }
