@@ -122,6 +122,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddSingleton<JwtService>();
 
+// Add Session Service
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ISessionService, SessionService>();
+
 // 2. Build app
 var app = builder.Build();
 

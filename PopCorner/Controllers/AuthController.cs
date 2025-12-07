@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PopCorner.Data;
 using PopCorner.Helpers;
+using PopCorner.Models.Domains;
 using PopCorner.Models.DTOs;
 using PopCorner.Repositories.Interfaces;
 using PopCorner.Service.Interfaces;
 using PopCorner.Services;
+using PopCorner.Services.Interfaces;
 
 namespace PopCorner.Controllers
 {
@@ -18,12 +20,14 @@ namespace PopCorner.Controllers
         private readonly IUserRepository userRepository;
         private readonly IMapper mapper;
         private readonly ICloudinaryService cloudinarySrv;
-        public AuthController(PopCornerDbContext dbContext, IUserRepository userRepository, IMapper mapper, ICloudinaryService cloudinarySrv)
+        private readonly ISessionService sessionService;
+        public AuthController(PopCornerDbContext dbContext, IUserRepository userRepository, IMapper mapper, ICloudinaryService cloudinarySrv, ISessionService sessionService)
         {
             this.dbContext = dbContext;
             this.userRepository = userRepository;
             this.mapper = mapper;
             this.cloudinarySrv = cloudinarySrv;
+            this.sessionService = sessionService;
         }
 
         [HttpPost("login")]
@@ -47,8 +51,11 @@ namespace PopCorner.Controllers
                         Email = user.Email,
                         Name = user.Name,
                         AvatarUrl = user.AvatarUrl,
+                        Birthday = user.Birthday,
                         Role = user.Role,
-                        Token = token
+                        Token = token,
+                        CreatedAt = user.CreatedAt,
+                        UpdatedAt = user.UpdatedAt
                     };
 
                     return Ok(response);
@@ -79,8 +86,11 @@ namespace PopCorner.Controllers
                     Email = user.Email,
                     Name = user.Name,
                     AvatarUrl = user.AvatarUrl,
+                    Birthday = user.Birthday,
                     Role = user.Role,
-                    Token = token
+                    Token = token,
+                    CreatedAt = user.CreatedAt,
+                    UpdatedAt = user.UpdatedAt
                 };
                 return Ok(response);
             }
@@ -90,6 +100,35 @@ namespace PopCorner.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("password")]
+        public async Task<IActionResult> ChangePassword([FromBody] EditPasswordDto dto)
+        {
+            try
+            {
+                var userId = sessionService.UserId;
+                var user = await userRepository.GetByIdAsync(userId);
+
+                if (user == null)
+                {
+                    return BadRequest("User not found");
+                }
+
+                var yes = PasswordHelper.Verify(dto.Password, user.PasswordHash);
+
+                if (!yes)
+                {
+                    return BadRequest("Password incorrect");
+                }
+
+                var hashPassword = PasswordHelper.Hash(dto.NewPassword);
+                user.PasswordHash = hashPassword;
+                await userRepository.UpdateAsync(userId, user);
+                return Ok(user);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest("Update failed");
+            }
+        }
     }
 }
