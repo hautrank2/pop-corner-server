@@ -150,11 +150,18 @@ namespace PopCorner.Repositories
             var movieRatings = mapper.Map<MovieRatingResponseDto[]>(ratings);
             return movieRatings;
         }
-        public async Task<MovieReaction[]> GetReaction(Guid movieId, Guid userId)
+        public async Task<MovieReaction> GetReactionSync(Guid movieId, Guid userId)
         {
             var data = await dbContext.MovieReactions.Where(x => x.UserId == userId && x.MovieId == movieId).ToArrayAsync();
+            return data[0];
+        }
+
+        public async Task<MovieReaction[]> GetReactionsSync(Guid movieId)
+        {
+            var data = await dbContext.MovieReactions.Where(x => x.MovieId == movieId).ToArrayAsync();
             return data;
         }
+
         public async Task<MovieReaction> AddReactionSync(MovieReaction dto)
         {
             await dbContext.MovieReactions.AddAsync(dto);

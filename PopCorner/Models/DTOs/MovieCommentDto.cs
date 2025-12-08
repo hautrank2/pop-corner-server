@@ -31,4 +31,11 @@ namespace PopCorner.Models.DTOs
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
     }
+
+    public class EditMovieCommentDto
+    {
+        [Required, MaxLength(2000)]
+        public string Content { get; set; } = string.Empty;
+        public DateTime? UpdatedAt { get; set; }
+    }
 }

@@ -475,6 +475,23 @@ namespace PopCorner.Controllers
             return Ok(data);
         }
 
+        [HttpPut("{id:Guid}/comment/{commentId:Guid}")]
+        public async Task<IActionResult> EditComment([FromRoute] Guid id, [FromRoute] Guid commentId, [FromBody] EditMovieCommentDto dto)
+        {
+            var cmt = await commentRepository.GetByIdAsync(id);
+            if(cmt == null)
+            {
+                return BadRequest("Comment is not exist");
+            }
+            
+            cmt.Content = dto.Content;
+            cmt.IsEdited = true;
+            cmt.UpdatedAt = DateTime.UtcNow;
+            await dbContext.SaveChangesAsync();
+
+            return Ok(cmt);
+        }
+
         [HttpGet("{id:Guid}/rate")]
         public async Task<IActionResult> GetRateSync([FromRoute] Guid id)
         {
@@ -492,18 +509,37 @@ namespace PopCorner.Controllers
             return Ok(movieRes);
         }
 
+        [HttpGet("{id:Guid}/reaction")]
+        public async Task<IActionResult> React([FromRoute] Guid id)
+        {
+            var res = await movieRepository.GetReactionsSync(id);
+            return Ok(res);
+        }
+
         [Authorize]
         [HttpPost("{id:Guid}/reaction")]
         public async Task<IActionResult> React([FromRoute] Guid id, [FromBody] UpsertMovieReactionDto dto)
         {
             var userId = sessionService.UserId;
-            var reaction = mapper.Map<MovieReaction>(dto);
 
-            reaction.UserId = userId;
-            reaction.MovieId = id;
-            reaction.CreatedAt = DateTime.UtcNow;
+            var reaction = await movieRepository.GetReactionSync(id, userId);
 
-            var res = await movieRepository.AddReactionSync(reaction);
+            if(reaction != null)
+            {
+                reaction.ReactionType = dto.ReactionType;
+                reaction.CreatedAt = DateTime.UtcNow;
+
+                await dbContext.SaveChangesAsync();
+                return Ok(reaction);
+            }
+
+            // Create new reaction
+            var newReaction = mapper.Map<MovieReaction>(dto);
+            newReaction.UserId = userId;
+            newReaction.MovieId = id;
+            newReaction.CreatedAt = DateTime.UtcNow;
+
+            var res = await movieRepository.AddReactionSync(newReaction);
 
             return Ok(res);
         }

@@ -31,6 +31,7 @@ namespace PopCorner.Mappings
 
             // Comment
             CreateMap<AddMovieCommentDto, Comment>().ReverseMap();
+            CreateMap<EditMovieCommentDto, Comment>().ReverseMap();
 
             // Movie
             CreateMap<Rating, MovieRatingResponseDto>().ReverseMap();
