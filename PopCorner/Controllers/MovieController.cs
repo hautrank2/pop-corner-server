@@ -475,6 +475,7 @@ namespace PopCorner.Controllers
             return Ok(data);
         }
 
+        [Authorize]
         [HttpPut("{id:Guid}/comment/{commentId:Guid}")]
         public async Task<IActionResult> EditComment([FromRoute] Guid id, [FromRoute] Guid commentId, [FromBody] EditMovieCommentDto dto)
         {
@@ -483,7 +484,13 @@ namespace PopCorner.Controllers
             {
                 return BadRequest("Comment is not exist");
             }
-            
+
+            var userId = sessionService.UserId;
+            if(cmt.UserId != userId)
+            {
+                return BadRequest("You cannot edit this comment");
+            }
+
             cmt.Content = dto.Content;
             cmt.IsEdited = true;
             cmt.UpdatedAt = DateTime.UtcNow;
@@ -492,6 +499,7 @@ namespace PopCorner.Controllers
             return Ok(cmt);
         }
 
+        [Authorize]
         [HttpDelete("{id:Guid}/comment/{commentId:Guid}")]
         public async Task<IActionResult> DeleteComment([FromRoute] Guid id, [FromRoute] Guid commentId)
         {
@@ -503,6 +511,13 @@ namespace PopCorner.Controllers
                 {
                     return BadRequest("Comment is not exist");
                 }
+
+                var userId = sessionService.UserId;
+                if (cmt.UserId != userId)
+                {
+                    return BadRequest("You cannot edit this comment");
+                }
+
 
                 await commentRepository.DeleteAsync(commentId);
 
@@ -532,6 +547,7 @@ namespace PopCorner.Controllers
             return Ok(movieRes);
         }
 
+        [Authorize]
         [HttpGet("{id:Guid}/reaction")]
         public async Task<IActionResult> GetReactions([FromRoute] Guid id)
         {
