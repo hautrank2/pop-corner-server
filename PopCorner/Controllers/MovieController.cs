@@ -492,6 +492,22 @@ namespace PopCorner.Controllers
             return Ok(movieRes);
         }
 
+        [Authorize]
+        [HttpPost("{id:Guid}/reaction")]
+        public async Task<IActionResult> React([FromRoute] Guid id, [FromBody] UpsertMovieReactionDto dto)
+        {
+            var userId = sessionService.UserId;
+            var reaction = mapper.Map<MovieReaction>(dto);
+
+            reaction.UserId = userId;
+            reaction.MovieId = id;
+            reaction.CreatedAt = DateTime.UtcNow;
+
+            var res = await movieRepository.AddReactionSync(reaction);
+
+            return Ok(res);
+        }
+
         async Task<(bool deleted, string? error)> DeleteAvt(string url)
         {
             try

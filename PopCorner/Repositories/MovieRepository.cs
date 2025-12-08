@@ -150,5 +150,15 @@ namespace PopCorner.Repositories
             var movieRatings = mapper.Map<MovieRatingResponseDto[]>(ratings);
             return movieRatings;
         }
+        public async Task<MovieReaction[]> GetReaction(Guid movieId, Guid userId)
+        {
+            var data = await dbContext.MovieReactions.Where(x => x.UserId == userId && x.MovieId == movieId).ToArrayAsync();
+            return data;
+        }
+        public async Task<MovieReaction> AddReactionSync(MovieReaction dto)
+        {
+            await dbContext.MovieReactions.AddAsync(dto);
+            return dto;
+        }
     }
 }

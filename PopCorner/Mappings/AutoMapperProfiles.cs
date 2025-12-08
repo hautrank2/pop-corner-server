@@ -34,6 +34,8 @@ namespace PopCorner.Mappings
 
             // Movie
             CreateMap<Rating, MovieRatingResponseDto>().ReverseMap();
+            CreateMap<MovieReaction, UpsertMovieReactionDto>().ReverseMap();
+
         }
     }
 }

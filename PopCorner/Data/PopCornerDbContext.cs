@@ -17,6 +17,7 @@ namespace PopCorner.Data
         public DbSet<User> User { get; set; }
         public DbSet<Comment> Comment { get; set; }
         public DbSet<Rating> Rating { get; set; }
+        public DbSet<MovieReaction> MovieReactions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder b)
         {
@@ -57,6 +58,11 @@ namespace PopCorner.Data
                 .WithMany()
                 .HasForeignKey(m => m.DirectorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Movie Reaction
+            b.Entity<MovieReaction>()
+                .HasIndex(m => new { m.MovieId, m.UserId })
+                .IsUnique();
 
             // ===== RATING =====
             b.Entity<Rating>()
