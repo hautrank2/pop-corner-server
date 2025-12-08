@@ -492,6 +492,29 @@ namespace PopCorner.Controllers
             return Ok(cmt);
         }
 
+        [HttpDelete("{id:Guid}/comment/{commentId:Guid}")]
+        public async Task<IActionResult> DeleteComment([FromRoute] Guid id, [FromRoute] Guid commentId)
+        {
+            try
+            {
+                var cmt = await commentRepository.GetByIdAsync(commentId);
+
+                if(cmt == null)
+                {
+                    return BadRequest("Comment is not exist");
+                }
+
+                await commentRepository.DeleteAsync(commentId);
+
+                return Ok(cmt);
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex);
+            }
+        }
+
+
         [HttpGet("{id:Guid}/rate")]
         public async Task<IActionResult> GetRateSync([FromRoute] Guid id)
         {

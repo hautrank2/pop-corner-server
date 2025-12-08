@@ -67,14 +67,28 @@ namespace PopCorner.Repositories
         // ---------------------------
         public async Task<Comment?> DeleteAsync(Guid id)
         {
-            var Comment = await dbContext.Comment.FirstOrDefaultAsync(x => x.Id == id);
-            if (Comment == null)
+            var comment = await dbContext.Comment.FirstOrDefaultAsync(x => x.Id == id);
+            if (comment == null)
                 return null;
 
-            dbContext.Comment.Remove(Comment);
-            await dbContext.SaveChangesAsync();
+            await DeleteCommentsRecursive(id);
 
-            return Comment;
+            dbContext.Comment.Remove(comment);
+            await dbContext.SaveChangesAsync();
+            return comment;
+        }
+
+        private async Task DeleteCommentsRecursive(Guid id)
+        {
+            var children = await dbContext.Comment
+                .Where(x => x.ParentId == id)
+                .ToListAsync();
+
+            foreach (var child in children)
+            {
+                await DeleteCommentsRecursive(child.Id);
+                dbContext.Comment.Remove(child);
+            }
         }
     }
 }
