@@ -8,6 +8,7 @@ using PopCorner.Models.Domains;
 using PopCorner.Models.DTOs;
 using PopCorner.Repositories.Interfaces;
 using PopCorner.Service.Interfaces;
+using PopCorner.Services.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PopCorner.Controllers
@@ -21,13 +22,16 @@ namespace PopCorner.Controllers
         private readonly IMapper mapper;
         private readonly ICloudinaryService cloudinarySrv;
         private readonly ICommentRepository commentRepository;
-        public MovieController(PopCornerDbContext dbContext, IMovieRepository movieRepository, IMapper mapper, ICloudinaryService cloudinarySrv, ICommentRepository commenRepository)
+        private readonly ISessionService sessionService;
+
+        public MovieController(PopCornerDbContext dbContext, IMovieRepository movieRepository, IMapper mapper, ICloudinaryService cloudinarySrv, ICommentRepository commenRepository, ISessionService sessionService)
         {
             this.dbContext = dbContext;
             this.movieRepository = movieRepository;
             this.mapper = mapper;
             this.cloudinarySrv = cloudinarySrv;
             this.commentRepository = commenRepository;
+            this.sessionService = sessionService;
         }
 
         // GET: MovieController
@@ -463,6 +467,8 @@ namespace PopCorner.Controllers
         public async Task<IActionResult> AddComment([FromRoute] Guid id, [FromBody] AddMovieCommentDto query)
         {
             var body = mapper.Map<Comment>(query);
+            var userId = sessionService.UserId;
+            body.UserId = userId;
             body.MovieId = id;
             body.IsEdited = false;
             var data = await commentRepository.CreateAsync(body);
@@ -481,8 +487,8 @@ namespace PopCorner.Controllers
         [HttpPost("{id:Guid}/rate")]
         public async Task<IActionResult> Rate([FromRoute] Guid id, [FromBody] MovieRateDto dto)
         {
-            var user = HttpContext.Items["User"] as User;
-            var movieRes = await movieRepository.Rate(id, user.Id, dto);
+            var userId = sessionService.UserId;
+            var movieRes = await movieRepository.Rate(id, userId, dto);
             return Ok(movieRes);
         }
 

@@ -20,4 +20,15 @@ namespace PopCorner.Models.DTOs
         public DateTime? UpdatedAt { get; set; }
         public bool IsEdited { get; set; }
     }
+
+    public class AddMovieCommentDto
+    {
+        [Required, MaxLength(2000)]
+        public string Content { get; set; } = string.Empty;
+
+        public Guid? ParentId { get; set; } // hỗ trợ thread
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+    }
 }
