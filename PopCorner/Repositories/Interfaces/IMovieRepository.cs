@@ -23,5 +23,6 @@ namespace PopCorner.Repositories.Interfaces
         Task<MovieReaction> AddReactionSync(MovieReaction dto);
         Task<MovieReaction> GetReactionSync(Guid movieId, Guid userId);
         Task<MovieReaction[]> GetReactionsSync(Guid movieId);
+        Task<MovieCredit[]> GetAllCreditsSync(Guid movieId);
     }
 }

@@ -167,5 +167,11 @@ namespace PopCorner.Repositories
             await dbContext.MovieReactions.AddAsync(dto);
             return dto;
         }
+
+        public async Task<MovieCredit[]> GetAllCreditsSync(Guid movieId)
+        {
+            var data = await dbContext.MovieCredit.Where(x => x.MovieId == movieId).Include(x => x.Artist).ToArrayAsync();
+            return data;
+        }
     }
 }

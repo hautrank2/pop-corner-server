@@ -510,7 +510,7 @@ namespace PopCorner.Controllers
         }
 
         [HttpGet("{id:Guid}/reaction")]
-        public async Task<IActionResult> React([FromRoute] Guid id)
+        public async Task<IActionResult> GetReactions([FromRoute] Guid id)
         {
             var res = await movieRepository.GetReactionsSync(id);
             return Ok(res);
@@ -518,7 +518,7 @@ namespace PopCorner.Controllers
 
         [Authorize]
         [HttpPost("{id:Guid}/reaction")]
-        public async Task<IActionResult> React([FromRoute] Guid id, [FromBody] UpsertMovieReactionDto dto)
+        public async Task<IActionResult> AddReactions([FromRoute] Guid id, [FromBody] UpsertMovieReactionDto dto)
         {
             var userId = sessionService.UserId;
 
@@ -542,6 +542,13 @@ namespace PopCorner.Controllers
             var res = await movieRepository.AddReactionSync(newReaction);
 
             return Ok(res);
+        }
+
+        [HttpGet("{id:Guid}/credits")]
+        public async Task<IActionResult> GetMovieCredits([FromRoute] Guid id)
+        {
+            var credits = await movieRepository.GetAllCreditsSync(id);
+            return Ok(credits);
         }
 
         async Task<(bool deleted, string? error)> DeleteAvt(string url)
