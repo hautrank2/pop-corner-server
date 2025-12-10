@@ -1,4 +1,5 @@
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -86,41 +87,20 @@ builder.Services.AddSingleton(sp =>
 });
 
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services
+    .AddAuthentication(options =>
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        // Scheme mặc định
+        options.DefaultAuthenticateScheme = AuthHandler.SchemeName;
+        options.DefaultChallengeScheme = AuthHandler.SchemeName;
+    })
+    .AddScheme<AuthenticationSchemeOptions, AuthHandler>(
+        AuthHandler.SchemeName,
+        options => { }
+    );
 
-            RoleClaimType = ClaimTypes.Role,
-            NameClaimType = ClaimTypes.NameIdentifier,
-            ClockSkew = TimeSpan.FromMinutes(2)
-        };
-
-        options.Events = new JwtBearerEvents
-        {
-            OnAuthenticationFailed = ctx =>
-            {
-                Console.WriteLine("JWT FAILED: " + ctx.Exception.GetType().Name + " - " + ctx.Exception.Message);
-                return Task.CompletedTask;
-            },
-            OnChallenge = ctx =>
-            {
-                Console.WriteLine($"JWT CHALLENGE: error={ctx.Error}, desc={ctx.ErrorDescription}");
-                return Task.CompletedTask;
-            }
-        };
-    });
 builder.Services.AddAuthorization();
-builder.Services.AddSingleton<JwtService>();
+//builder.Services.AddSingleton<JwtService>();
 
 // Add Session Service
 builder.Services.AddHttpContextAccessor();
@@ -130,7 +110,6 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 var app = builder.Build();
 
 // 3. Add middlware
-app.UseMiddleware<AuthMiddleware>();
 app.MapOpenApi();
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -139,6 +118,7 @@ app.UseCors(CORS_NAME);
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseStaticFiles();

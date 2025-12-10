@@ -455,7 +455,7 @@ namespace PopCorner.Controllers
             }
         }
 
-
+        [Authorize]
         [HttpGet("{id:Guid}/comment")]
         public async Task<IActionResult> GetComments([FromRoute] Guid id)
         {
