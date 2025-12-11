@@ -31,7 +31,7 @@ namespace PopCorner.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginSync([FromBody] LoginDto dto, [FromServices] JwtService jwt)
+        public async Task<IActionResult> LoginSync([FromBody] LoginDto dto, [FromServices] IJwtService jwt)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace PopCorner.Controllers
         }
 
         [HttpPost("login/email")]
-        public async Task<IActionResult> LoginEmailSync([FromBody] LoginEmailDto dto, [FromServices] JwtService jwt)
+        public async Task<IActionResult> LoginEmailSync([FromBody] LoginEmailDto dto, [FromServices] IJwtService jwt)
         {
             try
             {
@@ -106,6 +106,7 @@ namespace PopCorner.Controllers
             try
             {
                 var userId = sessionService.UserId;
+
                 var user = await userRepository.GetByIdAsync(userId);
 
                 if (user == null)

@@ -20,32 +20,52 @@ namespace PopCorner.Services
         public bool IsAuthenticated =>
             HttpContext.User?.Identity?.IsAuthenticated ?? false;
 
-        public User User
+        public Guid UserId
         {
             get
             {
-                // Logic hiện tại: lấy từ HttpContext.Items["User"]
-                if (HttpContext.Items["User"] is User userFromItem)
+                // 1. Ưu tiên đọc từ Items (AuthHandler đã set)
+                if (HttpContext.Items.TryGetValue("UserId", out var raw)
+                    && raw is Guid idFromItems)
                 {
-                    return userFromItem;
+                    return idFromItems;
                 }
 
-                // Nếu sau này bạn đổi sang lấy từ Claims:
-                var userIdClaim = HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                                  ?? HttpContext.User?.FindFirst("sub")?.Value;
+                // 2. Fallback: lấy từ claim
+                var idClaim =
+                    HttpContext.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
+                    HttpContext.User?.FindFirst("sub")?.Value;
 
-                if (Guid.TryParse(userIdClaim, out var userId))
+                if (Guid.TryParse(idClaim, out var idFromClaim))
                 {
-                    // TODO: nếu cần có thể inject IUserRepository để load từ DB
-                    // _userRepository.GetByIdAsync(userId) ...
-                    throw new InvalidOperationException(
-                        "User entity is not loaded. Implement loading logic here.");
+                    return idFromClaim;
                 }
 
-                throw new InvalidOperationException("Current user not found.");
+                // 3. Không có user → ném lỗi
+                throw new InvalidOperationException("No authenticated user id found in current context.");
             }
         }
 
-        public Guid UserId => User.Id;
+        public string? Email =>
+            HttpContext.User?.FindFirst(ClaimTypes.Email)?.Value;
+
+        public string? Role =>
+            HttpContext.User?.FindFirst(ClaimTypes.Role)?.Value ?? "User";
+
+        public User? User
+        {
+            get
+            {
+                if (HttpContext.Items.TryGetValue("User", out var raw)
+                    && raw is User u)
+                {
+                    return u;
+                }
+
+                // Nếu muốn lazy-load từ DB thì inject IUserRepository vào
+                // và dùng UserId để load. Còn không, cứ để null.
+                return null;
+            }
+        }
     }
 }

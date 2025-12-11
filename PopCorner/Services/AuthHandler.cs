@@ -42,7 +42,6 @@ namespace PopCorner.Services
 
             // 2. Validate token bằng JwtService
             var payload = jwtService.Validate(token);
-            Console.WriteLine($"[AuthHandler] After jwtService.Validate: payload null? {payload == null}");
 
             if (payload == null)
             {
@@ -52,7 +51,6 @@ namespace PopCorner.Services
             // Optional: cross-check user trong DB
             var user = await userRepository.GetByIdAsync(payload.UserId);
 
-            Console.WriteLine($"user: {user}");
             if (user == null)
             {
                 return AuthenticateResult.Fail("User not found or inactive");
@@ -67,10 +65,12 @@ namespace PopCorner.Services
                 new Claim(ClaimTypes.Role, user.Role ?? "User")
             };
 
-            Console.WriteLine($"{claims.Count} claims");
             var identity = new ClaimsIdentity(claims, SchemeName);
             var principal = new ClaimsPrincipal(identity);
             var ticket = new AuthenticationTicket(principal, SchemeName);
+
+            Request.HttpContext.Items["User"] = user;
+            Request.HttpContext.Items["UserId"] = user.Id;
 
             return AuthenticateResult.Success(ticket);
         }

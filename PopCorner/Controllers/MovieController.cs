@@ -479,7 +479,7 @@ namespace PopCorner.Controllers
         [HttpPut("{id:Guid}/comment/{commentId:Guid}")]
         public async Task<IActionResult> EditComment([FromRoute] Guid id, [FromRoute] Guid commentId, [FromBody] EditMovieCommentDto dto)
         {
-            var cmt = await commentRepository.GetByIdAsync(id);
+            var cmt = await commentRepository.GetByIdAsync(commentId);
             if(cmt == null)
             {
                 return BadRequest("Comment is not exist");

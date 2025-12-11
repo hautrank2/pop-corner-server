@@ -61,35 +61,33 @@ namespace PopCorner.Services
 
         public TokenPayload? Validate(string token)
         {
-            Console.WriteLine("************ JWT SERVICE VALIDATE CALLED ************");
-            Console.WriteLine($"[JwtService] Validate token: {token}");
-
             try
             {
                 var handler = new JwtSecurityTokenHandler();
-                Console.WriteLine("[JwtService] Before ValidateToken");
-
                 var principal = handler.ValidateToken(token, _tokenParams, out var validatedToken);
-
-                Console.WriteLine("[JwtService] After ValidateToken");
 
                 if (validatedToken is not JwtSecurityToken jwtToken ||
                     !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
                         StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Console.WriteLine("[JwtService] Token is not JwtSecurityToken OR alg mismatch");
                     return null;
                 }
 
-                var sub = principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
-                var email = principal.FindFirstValue(JwtRegisteredClaimNames.Email);
-                var role = principal.FindFirstValue(ClaimTypes.Role) ?? "User";
+                var sub =
+                    principal.FindFirstValue(ClaimTypes.NameIdentifier) ??
+                    principal.FindFirstValue(JwtRegisteredClaimNames.Sub);
 
-                Console.WriteLine($"[JwtService] Validate result: sub={sub}, email={email}, role={role}");
+                var email =
+                    principal.FindFirstValue(ClaimTypes.Email) ??
+                    principal.FindFirstValue(JwtRegisteredClaimNames.Email);
+
+                var role =
+                    principal.FindFirstValue(ClaimTypes.Role) ??
+                    principal.FindFirstValue("role") ??
+                    "User";
 
                 if (string.IsNullOrWhiteSpace(sub) || string.IsNullOrWhiteSpace(email))
                 {
-                    Console.WriteLine("[JwtService] sub/email empty -> return null");
                     return null;
                 }
 
@@ -102,8 +100,6 @@ namespace PopCorner.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[JwtService] EXCEPTION: {ex.GetType().Name}: {ex.Message}");
-                Console.WriteLine(ex); // in full stacktrace
                 return null;
             }
         }

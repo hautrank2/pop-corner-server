@@ -99,8 +99,6 @@ builder.Services
         options => { }
     );
 
-builder.Services.AddAuthorization();
-//builder.Services.AddSingleton<JwtService>();
 
 // Add Session Service
 builder.Services.AddHttpContextAccessor();
@@ -120,6 +118,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.UseStaticFiles();
 
