@@ -455,7 +455,6 @@ namespace PopCorner.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet("{id:Guid}/comment")]
         public async Task<IActionResult> GetComments([FromRoute] Guid id)
         {
@@ -515,7 +514,7 @@ namespace PopCorner.Controllers
                 var userId = sessionService.UserId;
                 if (cmt.UserId != userId)
                 {
-                    return BadRequest("You cannot edit this comment");
+                    return BadRequest("You cannot delete this comment");
                 }
 
 
@@ -547,7 +546,6 @@ namespace PopCorner.Controllers
             return Ok(movieRes);
         }
 
-        [Authorize]
         [HttpGet("{id:Guid}/reaction")]
         public async Task<IActionResult> GetReactions([FromRoute] Guid id)
         {

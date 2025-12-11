@@ -72,10 +72,6 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(AutoMapperProfiles));
 
-builder.Services.AddControllers()
-    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-
-
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
 builder.Services.AddSingleton(sp =>
@@ -103,7 +99,6 @@ builder.Services
 // Add Session Service
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ISessionService, SessionService>();
-
 // 2. Build app
 var app = builder.Build();
 
