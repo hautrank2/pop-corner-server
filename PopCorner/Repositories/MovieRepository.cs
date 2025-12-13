@@ -34,6 +34,18 @@ namespace PopCorner.Repositories
                  );
             }
 
+
+            if (query.GenreId.HasValue && query.GenreId != null)
+            {
+                var key = query.GenreId.Value;
+                var existGenre = await dbContext.Genre.FirstOrDefaultAsync(x => x.Id.Equals(key));
+
+                if(existGenre != null)
+                {
+                    movieQuery = movieQuery.Where(x => x.MovieGenres.Any(genre => genre.GenreId == key));
+                }
+            }
+
             var total = await movieQuery.CountAsync();
             var page = Math.Max(query.Page ?? 1, 1);
             var pageSize = Math.Max(query.PageSize ?? 10, 1);

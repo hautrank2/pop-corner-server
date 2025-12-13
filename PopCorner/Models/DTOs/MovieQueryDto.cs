@@ -9,5 +9,7 @@ namespace PopCorner.Models.DTOs
         public string? OrderBy { get; set; }
         public SortDirection? OrderDirection { get; set; }
         public string? Title { get; set; }
+
+        public int? GenreId { get; set; }
     }
 }
