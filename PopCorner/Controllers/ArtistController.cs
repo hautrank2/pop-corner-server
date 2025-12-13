@@ -59,6 +59,20 @@ namespace PopCorner.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetById([FromRoute] Guid id)
+        {
+            try
+            {
+                var artist = await artistRepository.GetByIdAsync(id);
+                return Ok(artist);
+            } catch (Exception ex)
+            {
+                return BadRequest($"Create movie failed: {ex.Message}");
+            }
+        }
+
         [HttpPut]
         [Route("{id:Guid}")]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromForm] EditArtistDto dto)
