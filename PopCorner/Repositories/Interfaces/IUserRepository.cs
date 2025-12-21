@@ -14,6 +14,8 @@ namespace PopCorner.Repositories.Interfaces
 
         Task<User?> UpdateAsync(Guid id, User dto);
 
+        Task<User?> GetByEmail(string email);
+
         Task<User?> DeleteAsync(Guid id);
     }
 }

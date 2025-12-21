@@ -59,6 +59,11 @@ namespace PopCorner.Repositories
             return await dbContext.User.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<User?> GetByEmail(string email)
+        {
+            return await dbContext.User.FirstOrDefaultAsync(x => x.Email == email);
+        }
+
         // ---------------------------
         // CREATE
         // ---------------------------

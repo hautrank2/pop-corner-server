@@ -99,6 +99,10 @@ builder.Services
 // Add Session Service
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddMemoryCache();
+
 // 2. Build app
 var app = builder.Build();
 
