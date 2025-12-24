@@ -54,15 +54,20 @@ namespace PopCorner.Services
 
         private SmtpClient CreateSmtpClient()
         {
-            return new SmtpClient(_config["Smtp:Host"])
+            var smtp = new SmtpClient(_config["Smtp:Host"])
             {
                 Port = int.Parse(_config["Smtp:Port"]),
-                Credentials = new NetworkCredential(
-                    _config["Smtp:Username"],
-                    _config["Smtp:Password"]
-                ),
-                EnableSsl = true
+                EnableSsl = bool.Parse(_config["Smtp:EnableSsl"] ?? "true"),
+                UseDefaultCredentials = false,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
             };
+
+            var user = _config["Smtp:Username"];
+            var pass = _config["Smtp:Password"];
+            if (!string.IsNullOrWhiteSpace(user))
+                smtp.Credentials = new NetworkCredential(user, pass);
+
+            return smtp;
         }
     }
 }

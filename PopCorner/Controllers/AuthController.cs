@@ -24,7 +24,8 @@ namespace PopCorner.Controllers
         private readonly ICloudinaryService cloudinarySrv;
         private readonly ISessionService sessionService;
         private readonly IAuthService authService;
-        public AuthController(PopCornerDbContext dbContext, IUserRepository userRepository, IMapper mapper, ICloudinaryService cloudinarySrv, ISessionService sessionService, IAuthService authService)
+        private readonly IEmailService emailService;
+        public AuthController(PopCornerDbContext dbContext, IUserRepository userRepository, IMapper mapper, ICloudinaryService cloudinarySrv, ISessionService sessionService, IAuthService authService, IEmailService emailService)
         {
             this.dbContext = dbContext;
             this.userRepository = userRepository;
@@ -32,6 +33,7 @@ namespace PopCorner.Controllers
             this.cloudinarySrv = cloudinarySrv;
             this.sessionService = sessionService;
             this.authService = authService;
+            this.emailService = emailService;
         }
 
         [HttpPost("login")]
@@ -139,21 +141,31 @@ namespace PopCorner.Controllers
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest dto)
         {
-            var email = dto.Email;
-            var user = await userRepository.GetByEmail(email);
-            var response = Ok(new { ok = true });
-
-            if (user == null) 
+            try
             {
-                // always return Ok to prevent searching email
+                var email = dto.Email;
+                var user = await userRepository.GetByEmail(email);
+                var response = Ok(new { ok = true });
+
+                if (user == null)
+                {
+                    // always return Ok to prevent searching email
+                    return response;
+                }
+
+                var otp = await authService.CreateOtpAsync(email);
+                var hashOtp = await authService.HashOtp(otp);
+                var key = GetKeyOtp(email);
+                await authService.SaveOtp(key, hashOtp);
+                await emailService.SendOtpAsync(email, otp);
                 return response;
             }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+                return BadRequest($"{ex.Message}");
+            }
 
-            var otp = await authService.CreateOtpAsync(email);
-            var hashOtp = await authService.HashOtp(otp);
-            var key = GetKeyOtp(email);
-            await authService.SaveOtp(key, hashOtp);
-            return response;
         }
 
         [HttpPost("verify-forgot-password-otp")]
