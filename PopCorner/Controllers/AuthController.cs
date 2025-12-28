@@ -153,8 +153,8 @@ namespace PopCorner.Controllers
                     return response;
                 }
 
-                var otp = await authService.CreateOtpAsync(email);
-                var hashOtp = await authService.HashOtp(otp);
+                var otp = authService.CreateOtp(email);
+                var hashOtp = authService.HashOtp(otp);
                 var key = GetKeyOtp(email);
                 await authService.SaveOtp(key, hashOtp);
                 await emailService.SendOtpAsync(email, otp);

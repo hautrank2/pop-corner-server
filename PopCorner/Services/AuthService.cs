@@ -8,7 +8,7 @@ namespace PopCorner.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly TimeSpan expiration = TimeSpan.FromSeconds(60 * 5); // 5 minutes
+        private readonly TimeSpan expiration = TimeSpan.FromSeconds(60 * 5 * 24); // 5 minutes
         private readonly IMemoryCache cache;
 
         public AuthService(IMemoryCache cache)
@@ -16,13 +16,13 @@ namespace PopCorner.Services
            this.cache = cache;
         }
 
-        public async Task<string> CreateOtpAsync(string email)
+        public string CreateOtp(string email)
         {
             var otp = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
             return otp;
         }
 
-        public async Task<string> HashOtp(string otp)
+        public string HashOtp(string otp)
         {
             var hash = PasswordHelper.Hash(otp);
             return hash;
@@ -34,7 +34,7 @@ namespace PopCorner.Services
             return true;
         }
 
-        public async Task<string?> GetHashOtp(string key)
+        public string? GetHashOtp(string key)
         {
             var result = cache.Get(key);
             if (result == null) 
@@ -46,7 +46,7 @@ namespace PopCorner.Services
 
         public async Task<bool> VerifyOtp(string hashOtp, string targetOtp)
         {
-            var isOk = PasswordHelper.Verify(hashOtp, targetOtp);
+            var isOk = PasswordHelper.Verify(targetOtp, hashOtp);
 
             return isOk;
         }

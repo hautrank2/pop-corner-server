@@ -3,9 +3,9 @@
     public interface IAuthService
     {
         // OTP
-        Task<string> CreateOtpAsync(string email);
+        string CreateOtp(string email);
 
-        Task<string> HashOtp(string otp);
+        string HashOtp(string otp);
 
         Task<bool> SaveOtp(string key, string hashOtp);
 
@@ -13,6 +13,6 @@
 
         Task<bool> RemoveOtp(string key);
 
-        Task<string?> GetHashOtp(string key);
+        string? GetHashOtp(string key);
     }
 }
